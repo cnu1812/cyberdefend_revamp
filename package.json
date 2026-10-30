@@ -11,5 +11,8 @@
     "check": "node scripts/check.mjs && node scripts/check-seo.mjs && node scripts/check-contact.mjs && node scripts/check-blog.mjs && node scripts/check-analytics.mjs",
     "test": "npm run build && npm run check",
     "preview": "node scripts/serve.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.1"
   }
 }
