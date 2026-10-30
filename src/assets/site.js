@@ -43,3 +43,46 @@ if(form){
   });
  }
 }
+{
+ const lists=[...document.querySelectorAll('[data-blog-list]')];
+ if(lists.length){
+  const anchor=lists[0].closest('section')||lists[0];
+  const wrap=document.createElement('div');
+  wrap.className='blog-search container';
+  const label=document.createElement('label');
+  label.htmlFor='blog-search-input';
+  label.textContent='Search articles';
+  const input=document.createElement('input');
+  input.type='search';input.id='blog-search-input';input.autocomplete='off';input.placeholder='Search by title or summary';
+  const clear=document.createElement('button');
+  clear.type='button';clear.textContent='Clear search';clear.hidden=true;
+  const status=document.createElement('p');
+  status.className='blog-search-status';
+  status.setAttribute('role','status');status.setAttribute('aria-live','polite');
+  wrap.append(label,input,clear,status);
+  anchor.parentNode.insertBefore(wrap,anchor);
+  const groups=lists.map(list=>({list,items:[...list.querySelectorAll('article')]}));
+  const apply=()=>{
+   const q=input.value.trim().toLowerCase();
+   let total=0;
+   groups.forEach(({list,items})=>{
+    let shown=0;
+    items.forEach(card=>{
+     const text=((card.querySelector('h3')?.textContent||'')+' '+(card.querySelector('p')?.textContent||'')).toLowerCase();
+     const match=!q||text.includes(q);
+     card.hidden=!match;
+     if(match)shown++;
+    });
+    const sec=list.closest('section');
+    if(sec)sec.hidden=q!==''&&shown===0;
+    total+=shown;
+   });
+   clear.hidden=q==='';
+   status.textContent=!q?'':total===0?'No articles match your search. Clear the search to see all articles.':`${total} ${total===1?'article':'articles'} found.`;
+  };
+  const reset=()=>{input.value='';apply();input.focus();};
+  input.addEventListener('input',apply);
+  input.addEventListener('keydown',e=>{if(e.key==='Escape'&&input.value)reset();});
+  clear.addEventListener('click',reset);
+ }
+}

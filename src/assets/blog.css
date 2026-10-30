@@ -22,3 +22,12 @@
 .blog-sources{border-top:1px solid var(--line);margin:40px 0 28px}
 .blog-sources li{font-size:15px}
 @media(max-width:520px){.blog-header{padding-bottom:20px}.blog-header h1{letter-spacing:-1px}.blog-copy h2{font-size:25px}.blog-contents{padding:20px}.blog-copy p,.blog-copy li{font-size:16px}.blog-copy ul,.blog-copy ol{padding-left:22px}}
+
+/* ===== NEW: Blog search ===== */
+.blog-search{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding-top:24px;padding-bottom:24px}
+.blog-search label{flex:0 0 100%;font-weight:700;font-size:15px}
+.blog-search input[type="search"]{flex:1 1 280px;max-width:480px;min-height:46px;padding:10px 14px;font:inherit;background:#fff;border:1.5px solid var(--line);border-radius:6px}
+.blog-search input[type="search"]:focus-visible,.blog-search button:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.blog-search button{min-height:46px;padding:10px 18px;font:inherit;font-weight:600;color:#fff;background:#0b2233;border:0;border-radius:6px;cursor:pointer}
+.blog-search button:hover{background:var(--teal)}
+.blog-search-status{flex:0 0 100%;margin:0;min-height:1.4em;font-size:15px;color:var(--muted)}
