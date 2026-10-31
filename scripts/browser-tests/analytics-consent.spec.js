@@ -53,7 +53,6 @@ test.beforeEach(async ({ page }) => {
   });
 
   await page.goto('http://127.0.0.1:4173/');
-
   await page.addScriptTag({ content: testAnalyticsSource });
 });
 
@@ -210,4 +209,34 @@ test('footer analytics preferences are keyboard accessible', async ({
   await expect(
     page.getByRole('button', { name: 'Accept analytics' })
   ).toBeFocused();
+});
+
+test('WhatsApp custom events exclude private message and URL values', async ({
+  page,
+}) => {
+  await page.getByRole('button', { name: 'Accept analytics' }).click();
+
+  await page.evaluate(() => {
+    const link = document.createElement('a');
+    link.href =
+  'https://wa.me/1234567890?text=SYNTHETIC_PRIVATE_MESSAGE';
+link.textContent = 'WhatsApp test';
+document.body.appendChild(link);
+
+link.addEventListener('click', event => {
+  event.preventDefault();
+});
+
+link.click();
+  });
+
+  const payloads = await page.evaluate(() =>
+    window.dataLayer
+      .filter(args => args[0] === 'event' || args[0] === 'config')
+      .map(args => JSON.stringify(args))
+      .join('\n')
+  );
+
+  expect(payloads).not.toContain('SYNTHETIC_PRIVATE_MESSAGE');
+  expect(payloads).not.toContain('1234567890');
 });
