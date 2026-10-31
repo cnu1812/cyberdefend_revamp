@@ -1,5 +1,263 @@
 [
   {
+    "slug": "drupal-commerce-cve-2026-118539-patch-order-audit",
+    "title": "Drupal Commerce CVE-2026-118539: Patch and Audit Orders",
+    "description": "Respond to the actively exploited Drupal Commerce access-bypass flaw with version checks, a safe update and an evidence-based order reconciliation workflow.",
+    "summary": "Drupal confirms active exploitation of a Commerce Core access-bypass vulnerability. Updating the module and reviewing potentially inconsistent orders are separate, necessary response tasks.",
+    "author": "CyberDefend",
+    "datePublished": "2026-10-31",
+    "dateModified": "2026-10-31",
+    "category": "Application security",
+    "sources": [
+      {
+        "id": "drupal",
+        "title": "Drupal SA-CONTRIB-2026-254, 28 October 2026",
+        "url": "https://www.drupal.org/sa-contrib-2026-254"
+      },
+      {
+        "id": "canada",
+        "title": "Canadian Centre for Cyber Security AV26-1105, 30 October 2026",
+        "url": "https://www.cyber.gc.ca/en/alerts-advisories/drupal-security-advisory-av26-1105"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "heading",
+        "id": "summary",
+        "text": "What store operators should do now"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Check whether your store uses Drupal Commerce Core, update an affected installation, and audit orders for inconsistencies. Drupal’s 28 October 2026 advisory identifies CVE-2026-118539 as an access-bypass vulnerability and explicitly confirms active exploitation. It affects versions below 2.41 and versions from 3.0.0 up to, but excluding, 3.3.13. The prescribed updates are Commerce Core 8.x-2.41 for the earlier branch and 3.3.13 for 3.x."
+          },
+          {
+            "text": " Read the advisory.",
+            "source": "drupal"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "The Canadian Centre for Cyber Security published AV26-1105 on 30 October, repeating the affected-version information and noting reports of exploitation. This is a current response priority for organisations running the affected module, not a reason to assume every Drupal website is compromised."
+          },
+          {
+            "text": " Read the advisory.",
+            "source": "canada"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "scope",
+        "text": "Understand the affected component"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Commerce Core is a contributed commerce module, not Drupal core itself. The vendor says insufficient protection of certain routes and entity fields permits access bypass with possible financial consequences. Its advisory covers a module used for shopping-cart and checkout experiences as well as API-driven commerce. It also specifically asks sites to audit orders."
+          },
+          {
+            "text": " Read the advisory.",
+            "source": "drupal"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "The public description does not justify inventing a universal exploit path, a specific fraud amount or a claim that every payment integration behaves identically. Keep the distinction between confirmed exploitation somewhere in the ecosystem and evidence about your own store. Your first task is to establish applicability, followed by remediation and a proportionate review."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "inventory",
+        "text": "Establish an accurate inventory"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Ask the application owner to identify the deployed Commerce package version and the branch in use. Compare the production deployment with the dependency lockfile and release record. A developer’s laptop or a staging environment can be current while the production release remains old. Record the evidence source and the time it was checked."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Include separate storefronts, customer-specific deployments and older environments that still accept requests. A services company supporting multiple merchants should maintain a separate assessment for each customer. Do not copy customer order data into a shared engineering chat to make the investigation easier. Record minimal identifiers and keep detailed evidence in approved, access-controlled storage."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "If ownership is uncertain, assign someone to resolve it instead of marking the system unaffected. An empty asset register is not proof that the module is absent. Conversely, a Drupal installation without the named Commerce component should not be treated as affected merely because a scanner recognised the content-management system."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "patch",
+        "text": "Update with a controlled validation plan"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Prepare a protected backup and a recovery plan suitable for the application before maintenance. Confirm how dependency changes are built and promoted so the correction persists through the next deployment. Updating a file on one server without changing the authoritative release process can leave other instances behind or reintroduce the old package later."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Use the project’s established dependency-management workflow to select the fixed branch release. Test in a representative environment where feasible, then verify the actual production version after deployment. Record the package version, deployment identifier, timestamp and responsible engineer. Treat unresolved dependency conflicts as explicit exceptions with an owner, not as a successful patch."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Perform a small set of authorised functional checks using synthetic accounts and test payment facilities. Confirm that legitimate checkout, discounts, shipping calculations and order processing still behave as expected for your store. These are compatibility checks, not exploit reproduction. Never probe a customer’s live payment flow with unauthorised transactions or publish operational attack instructions in an incident ticket."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "order-review",
+        "text": "Turn order auditing into a repeatable process"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Patching protects the corrected application going forward; it does not explain whether earlier orders were legitimate. Our recommended review is a reconciliation between the application’s order records, the payment provider’s transaction records and fulfilment evidence. Involve finance or store operations because engineers may not know which adjustments are normal business practice."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "For each suspicious order, compare the expected commercial total with the amount authorised or captured, the currency, discounts, refunds and delivery status. Use historical pricing or the relevant order snapshot where available: comparing an older transaction against today’s catalogue can create false positives. Record why an inconsistency requires investigation rather than labelling every difference as fraud."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Prioritise unexplained totals, payment-state mismatches and unusual changes around order completion. These are proposed review criteria, not vendor-provided indicators of compromise. Legitimate promotions, partial captures, manual corrections and currency handling may explain differences. Validate against business rules before taking action that affects a customer."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Choose the review period using available evidence and operational context. The advisory publication date is not necessarily the first possible exposure date. Document how far records extend and where gaps remain. If the team cannot establish a defensible historical boundary, state that limitation instead of implying that reviewing only the latest day proves earlier transactions were safe."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "containment",
+        "text": "Coordinate containment and evidence handling"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "If credible suspicious activity appears, preserve relevant order records, application logs, proxy records and payment references under the organisation’s incident process. Avoid editing original evidence simply to make reconciliation easier. Use a separate working copy or documented analysis view, and record the queries or filters that produced the results."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Consider pausing fulfilment of specific questionable orders while the authorised business team reviews them. Broader checkout restrictions may be justified by observed risk, but they have business consequences and should be coordinated with the store owner. The objective is to reduce further loss without making unsupported accusations or disrupting all customers unnecessarily."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Do not rotate unrelated credentials or announce a data breach solely because an access-bypass advisory exists. Escalate based on evidence and the systems actually implicated. A confirmed order-integrity issue, a payment-processing issue and disclosure of customer information are different findings; incident communications should say what is known and what remains under review."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "exercise",
+        "text": "A safe learning exercise"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Illustrative exercise: give a trainee synthetic orders, matching payment events and several legitimate discounts. Include one unexplained mismatch and one harmless partial refund. Ask for a reconciliation worksheet with evidence, alternative explanations and escalation decisions. This teaches application-security impact without requiring exploitation or access to real customer data."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Have a reviewer assess whether the trainee distinguishes expected totals from captured amounts and identifies missing context. The strongest result is not the largest number of suspicious orders. It is a short, reproducible explanation of which cases need follow-up and why."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "takeaways",
+        "text": "Completion criteria and limitations"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Close the remediation task only after the deployed version is verified. Track the order review separately until its scope, findings and unresolved cases have been documented. Retain the vendor advisory link and recheck it for updates. This article reflects sources reviewed on 31 October 2026 and does not claim firsthand testing or compromise of any reader’s store."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "For practical defensive learning, explore CyberDefend Academy’s "
+          },
+          {
+            "text": "professional programmes",
+            "internal": "programmes"
+          },
+          {
+            "text": " and "
+          },
+          {
+            "text": "hands-on labs",
+            "internal": "labs"
+          },
+          {
+            "text": ". Practise connecting technical fixes with evidence-based business-impact assessment."
+          }
+        ]
+      }
+    ]
+  },
+  {
     "slug": "google-cloud-security-bulletins-no-customer-action-response",
     "title": "Google Cloud Security Bulletins: What “No Action Required” Means",
     "description": "How to handle provider-patched cloud vulnerabilities: verify scope, document ownership, assess evidence and avoid unnecessary emergency changes.",
