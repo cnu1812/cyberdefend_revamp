@@ -1,5 +1,276 @@
 [
   {
+    "slug": "whatsapp-malicious-attachments-business-response-guide",
+    "title": "WhatsApp Malware: A Business Guide to Suspicious Attachments",
+    "description": "Respond safely to unexpected WhatsApp files: verify senders, contain affected devices and build safer document-intake workflows for your business.",
+    "summary": "A recent SingCERT advisory describes malware spreading through compromised WhatsApp accounts. Familiar contacts do not make attachments trustworthy: build a clear verification and response process.",
+    "author": "CyberDefend",
+    "datePublished": "2026-11-01",
+    "dateModified": "2026-11-01",
+    "category": "Threat awareness",
+    "sources": [
+      {
+        "id": "csa",
+        "title": "SingCERT: Malware campaigns spreading through WhatsApp, 28 October 2026",
+        "url": "https://www.csa.gov.sg/alerts-and-advisories/advisories/ad-2026-013/"
+      },
+      {
+        "id": "owasp",
+        "title": "OWASP File Upload Cheat Sheet",
+        "url": "https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "heading",
+        "id": "summary",
+        "text": "The immediate rule: verify the file, not just the contact"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Do not open an unexpected business attachment merely because it arrived from a saved contact. Confirm the request through a separate, trusted channel and use your organisation’s approved document-intake process. If a file has already been executed, treat the device and the messaging account as separate response concerns rather than assuming that changing one account setting resolves everything."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "On 28 October 2026, SingCERT reported malware campaigns distributing files through compromised WhatsApp accounts. Reported recipients opened malicious files and subsequently found similar files sent to contacts without authorisation. The advisory describes possible credential theft, device compromise and misuse of WhatsApp Web sessions; these are risks, not evidence that every recipient experienced all of them."
+          },
+          {
+            "text": " Read the source guidance.",
+            "source": "csa"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "relevance",
+        "text": "Why this matters for service businesses and colleges"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "WhatsApp is often a convenient first contact for enquiries, recruitment coordination and supplier communication. An Indian training provider might receive a curriculum document, student list or quotation from someone it already knows. The operational risk is that familiarity can replace verification at exactly the point where a file reaches an employee’s workstation."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "This article does not claim that the reported campaign targeted CyberDefend, Indian colleges or any particular reader. The relevance is the workflow: a trusted relationship can carry an untrusted file. A practical defence must preserve legitimate communication while giving staff a clear way to pause, check and report suspicious requests without embarrassment."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "boundaries",
+        "text": "Understand the different trust boundaries"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "The sender identity, the message’s business purpose and the file’s behaviour are separate questions. A recognised number does not establish who currently controls the account. A plausible invoice does not prove that the attachment contains only an invoice. Even an authentic sender can unknowingly forward unsafe material."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Encryption in transit is also a different property from endpoint safety. Protecting a conversation from interception does not make every object exchanged in that conversation harmless. Employees should not interpret a platform’s security branding as permission to execute software delivered in a chat. The decision to run a file still changes what the local device is allowed to do."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "verification",
+        "text": "Make verification easy enough to use"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Our recommended intake rule is simple: unexpected files wait. Ask whether a file was expected, whether its type fits the task and whether the request contains an unusual instruction to install software or bypass a warning. A request to disable protection should trigger escalation, not improvisation."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Confirm unexpected requests using an independently known phone number or another established channel. Replying in the same potentially compromised chat is not independent verification. For a colleague, use the internal directory; for a supplier, use the contact information already held in the vendor record rather than details supplied in the suspicious message."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Avoid turning verification into a blanket accusation. A neutral response such as asking the sender to confirm the document through the agreed channel preserves the relationship. If the sender denies sending it, stop distributing the attachment and use the organisation’s reporting route. Do not forward the file to a group of colleagues for informal opinions."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "response",
+        "text": "If someone already opened or ran the attachment"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "SingCERT recommends disconnecting the affected device, scanning it with antivirus software, warning contacts, reviewing linked devices and removing unfamiliar sessions. It also recommends two-step verification and avoiding sensitive accounts on a potentially infected device until it is secured."
+          },
+          {
+            "text": " Read the source guidance.",
+            "source": "csa"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "For a managed business device, contact IT or the designated incident lead promptly and follow the approved isolation procedure. Record when the message arrived, whether the file was downloaded or executed, and what happened next. Those distinctions help responders assess scope. Do not ask an employee to reopen the attachment to demonstrate the problem."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Use a known-clean device for account recovery and essential communications. Responders should evaluate endpoint evidence before declaring the device safe; a completed scan alone should not be represented as proof that nothing else happened. Where the investigation supports rebuilding or additional containment, plan it through the authorised response process."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Preserve the message context and relevant records without spreading the suspicious file. Keep personal information and customer documents out of public malware-analysis services unless an authorised process has assessed the disclosure implications. If there is evidence of financial misuse, involve the appropriate finance and incident-response owners promptly."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "safer-intake",
+        "text": "Improve the document workflow, not just awareness"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "For recurring recruitment or training enquiries, offer an approved upload destination with a clear purpose and accepted file types. A website form is not automatically safer than messaging: its implementation must treat uploaded content as untrusted too. Avoid replacing one unmanaged channel with a publicly accessible file repository."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "OWASP recommends layered upload controls, including allowed extensions, content validation, size limits, controlled filenames and storage outside the webroot where possible. It warns that client-supplied Content-Type cannot be trusted and that no single validation technique is sufficient. Antivirus or sandbox scanning can be part of that layered approach."
+          },
+          {
+            "text": " Read the source guidance.",
+            "source": "owasp"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Our operational recommendation is to separate intake from execution. Staff reviewing applications should not need administrator privileges or software installers from applicants. Keep document-processing tools maintained, restrict access to submitted files and define retention rules appropriate to the business purpose. Test the upload process with harmless samples, not live malware."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "monitoring",
+        "text": "Give defenders useful context"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "A useful report includes the recipient device, approximate time, sender identifier, attachment name and whether execution occurred. Collect only what responders need and protect the resulting case record. Correlate any endpoint alerts with the report instead of assuming that a familiar filename proves benign activity."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Look for unauthorised messaging sessions or unexpected endpoint changes through approved management tools. Treat these as investigation leads rather than automatic attribution to this campaign. Legitimate remote-support software and routine administrative changes can resemble suspicious activity without context. No detection rule or indicator list is supplied here because a defensible conclusion requires environment-specific evidence."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "practice",
+        "text": "A short exercise for teams and interns"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Illustrative exercise: present three synthetic messages—a planned document from a verified contact, an unexpected archive from a known contact and a request to install a viewer. Ask trainees to explain the next action and the evidence they need. Do not include executable payloads or real customer records."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Score the exercise on verification, reporting and containment decisions rather than on guessing which fictional message is malicious. Include a scenario where a person already clicked so that the team practises a supportive response. A culture that punishes reporting can delay the information defenders need most."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "takeaways",
+        "text": "Takeaways and limitations"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "The goal is a repeatable habit: pause on unexpected attachments, verify independently, and report quickly if execution occurs. Account recovery and endpoint recovery should be assessed separately. This article reflects sources reviewed on 1 November 2026, not a claim of a newly discovered WhatsApp software vulnerability or firsthand investigation."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "For guided defensive practice, explore CyberDefend Academy’s "
+          },
+          {
+            "text": "professional programmes",
+            "internal": "programmes"
+          },
+          {
+            "text": " and "
+          },
+          {
+            "text": "hands-on labs",
+            "internal": "labs"
+          },
+          {
+            "text": ". Use authorised exercises to connect awareness with practical response skills."
+          }
+        ]
+      }
+    ]
+  },
+  {
     "slug": "drupal-commerce-cve-2026-118539-patch-order-audit",
     "title": "Drupal Commerce CVE-2026-118539: Patch and Audit Orders",
     "description": "Respond to the actively exploited Drupal Commerce access-bypass flaw with version checks, a safe update and an evidence-based order reconciliation workflow.",
