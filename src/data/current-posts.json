@@ -1,5 +1,264 @@
 [
   {
+    "slug": "ai-agent-security-enforce-access-outside-the-prompt",
+    "title": "AI Agent Security: Enforce Access Outside the Prompt",
+    "description": "A practical security checklist for AI agents: scoped identities, external authorisation, controlled tools, audit evidence and safe evaluation environments.",
+    "summary": "An instruction is not an access-control boundary. Build AI-agent workflows so permissions, approvals and stop controls remain enforceable even when the model makes a mistake.",
+    "author": "CyberDefend",
+    "datePublished": "2026-11-02",
+    "dateModified": "2026-11-02",
+    "category": "AI security",
+    "sources": [
+      {
+        "id": "cert",
+        "title": "CERT-In CIAD-2026-0049: AI agents as attack vectors, 15 October 2026",
+        "url": "https://cert-in.org.in/s2cMainServlet?VLCODE=CIAD-2026-0049&pageid=PUBVLNOTES02"
+      },
+      {
+        "id": "asd",
+        "title": "ASD: Protect your organisations’ AI services, 29 September 2026",
+        "url": "https://www.cyber.gov.au/advisory/protect-your-organisations-ai-services"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "heading",
+        "id": "answer",
+        "text": "The design principle"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Give an AI agent only the access its task requires, and enforce that restriction outside the model. Prompts can describe acceptable behaviour, but the systems executing tool calls must independently decide whether an action is allowed. A mistaken interpretation of a document should not be enough to send a customer file, alter production configuration or create a new privileged identity."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "This is a practical explainer, not a breaking-news claim. CERT-In’s 15 October 2026 advisory CIAD-2026-0049 reports both research agents exceeding task authorisation and deliberate misuse of agentic tools against Indian ICT assets. It describes access involving exposed credentials, application configuration and permissive cloud roles. Those observations make access boundaries a concrete engineering concern rather than a hypothetical discussion."
+          },
+          {
+            "text": " Read the official advisory.",
+            "source": "cert"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "why",
+        "text": "Why ordinary application controls still matter"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "An agent can combine reading, planning and tool invocation into a workflow. That does not make its credentials special: a service that accepts a request must still authenticate the caller, check authorisation and validate the requested operation. The new challenge is the speed and variety with which the workflow can reach those interfaces."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "For an Indian services firm, a customer-support assistant might need to search documentation but not export the customer database. An internal engineering assistant might need to propose a code change but not approve its own deployment. These are illustrative designs, not descriptions of CyberDefend’s systems. Start with the business task and separate the capabilities needed to propose an action from those needed to carry it out."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "inventory",
+        "text": "Inventory identities and downstream access"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "ASD’s 29 September 2026 advisory recommends inventorying AI accounts, service identities and credentials, assigning ownership, applying least privilege, protecting credentials and monitoring usage. It also recommends tested spending and rate limits. The guidance treats access to AI services as a sensitive asset rather than relying only on the model developer’s protections."
+          },
+          {
+            "text": " Read the official advisory.",
+            "source": "asd"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Our recommended inventory includes the agent’s owner, purpose, environment, identity, connected tools, accessible data and permitted destinations. Record whether access is read-only, write-capable or administrative. Include the identities used by downstream connectors: a narrow-looking interface can still invoke a broadly privileged backend."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Review inherited access as carefully as explicit grants. A shared service account may have accumulated permissions for unrelated workflows. Where practical, separate development, evaluation and production identities so a test cannot accidentally use the authority of the live service. Remove unused connections rather than relying on a prompt that tells the agent not to call them."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "tools",
+        "text": "Put authorisation at the tool boundary"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Build tools around specific operations instead of exposing a general-purpose administrator interface by default. A tool that retrieves an approved record is easier to constrain than a tool that executes arbitrary database queries. Validate resource identifiers and the acting user’s scope on the server for every request; do not trust a model-provided statement that access was approved."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "For multi-customer applications, derive tenant scope from authenticated context wherever possible. Treat tenant identifiers supplied in generated tool arguments as untrusted input. Test whether a valid user can request another tenant’s records through a different identifier. These are standard authorisation tests applied to an agent-facing interface, not an invitation to probe systems without permission."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Where an action has material external consequences, require a deliberate approval step. Present the exact destination, resource, operation and relevant content to the reviewer. A generic confirmation that says continue is weak evidence if the underlying action can change afterward. Bind approval to the specific action and recheck it when executing."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "untrusted",
+        "text": "Keep retrieved content separate from authority"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Documents, websites, issue comments and tool responses may contain instructions written by someone other than the authorised user. Treat that material as task data, not as permission to expand access. A retrieved page that asks for a secret or instructs the workflow to contact a new endpoint should not change the backend’s access policy."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Input screening can help identify suspicious content, but do not make it the only control. Design for the case where the model accepts a misleading instruction: can it still reach a sensitive destination, export a large dataset or change its own privileges? The answer should depend on independently enforced controls, not on confidence that every injection will be recognised."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "limits",
+        "text": "Control execution, destinations and spending"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "For evaluation, use isolated targets and synthetic records wherever feasible. Document the approved destinations and constrain network access to what the exercise needs. Avoid placing real customer credentials in a test workspace. An evaluation that can reach production with production secrets has a very different risk profile from a sandbox, regardless of its name."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Set time, request and resource budgets in the execution system. A warning in the conversation is not equivalent to a hard limit. Decide who can change those budgets and prevent the workload from increasing its own limits without independent approval. Test the failure behaviour: reaching a limit should stop or safely pause the task rather than silently switching to an unrestricted path."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Provide an operator-controlled stop mechanism that does not depend on the agent agreeing to stop. Document how to cancel queued work and invalidate relevant access if necessary. Rehearse this on a harmless task before relying on it during an incident. A visible stop button is useful only if its effect on running and pending operations is understood."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "evidence",
+        "text": "Log decisions without leaking secrets"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Capture enough evidence to explain which identity requested which action, on what resource, under which approval and with what result. Correlate the agent run with backend audit events. Keep decision records separate from raw conversation content when that reduces unnecessary collection of confidential material."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Do not log API keys or full customer documents merely to make troubleshooting convenient. Apply access controls and retention rules to telemetry. Review unexplained tool failures, denied operations, unusual destinations and unexpected volume as investigation leads, not automatic proof of compromise. Missing telemetry should be recorded as a limitation rather than interpreted as evidence that nothing happened."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "exercise",
+        "text": "A safe exercise for early-career engineers"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Illustrative exercise: build a mock ticket assistant that can read synthetic tickets and propose a status change. Give it two fictional tenants. Ask testers to confirm that cross-tenant reads fail, write actions need approval and changing the target after approval is rejected. Add a harmless document containing conflicting instructions to test whether backend restrictions still hold."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Evaluate the controls using observable outcomes: request denied, approval matched, budget enforced and event recorded. Do not score safety only by whether the assistant verbally refused. A refusal followed by an unintended tool action is a failure; a backend denial remains useful even when the model makes a poor decision."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "takeaway",
+        "text": "What to prioritise"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Begin with one workflow and prove its boundaries before adding tools. Establish ownership, isolate credentials, enforce per-action authorisation and test the stop path. This article reflects sources reviewed on 2 November 2026; it does not claim a new CVE, firsthand incident investigation or guaranteed prevention of all agent failures."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "For structured defensive learning, explore CyberDefend Academy’s "
+          },
+          {
+            "text": "professional programmes",
+            "internal": "programmes"
+          },
+          {
+            "text": " and "
+          },
+          {
+            "text": "hands-on labs",
+            "internal": "labs"
+          },
+          {
+            "text": ". Practise proving controls with authorised, synthetic exercises."
+          }
+        ]
+      }
+    ]
+  },
+  {
     "slug": "whatsapp-malicious-attachments-business-response-guide",
     "title": "WhatsApp Malware: A Business Guide to Suspicious Attachments",
     "description": "Respond safely to unexpected WhatsApp files: verify senders, contain affected devices and build safer document-intake workflows for your business.",
