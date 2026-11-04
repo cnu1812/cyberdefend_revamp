@@ -1,5 +1,296 @@
 [
   {
+    "slug": "android-security-patch-level-business-device-checklist",
+    "title": "Android Security Patch Levels: A Business Device Checklist",
+    "description": "Verify Android security updates across work devices: distinguish version and patch dates, confirm installation and manage unsupported-device exceptions.",
+    "summary": "November’s Android bulletin is a useful prompt to check what your devices actually run. A new Android version, a downloaded update and a verified security patch level are not interchangeable.",
+    "author": "CyberDefend",
+    "datePublished": "2026-11-04",
+    "dateModified": "2026-11-04",
+    "category": "Endpoint security",
+    "sources": [
+      {
+        "id": "bulletins",
+        "title": "Android Open Source Project: Security bulletin overview",
+        "url": "https://source.android.com/docs/security/bulletin/asb-overview"
+      },
+      {
+        "id": "help",
+        "title": "Google Android Help: Check and update your Android version",
+        "url": "https://support.google.com/android/answer/7680439"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "heading",
+        "id": "answer",
+        "text": "Start with the security patch level"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "For business Android devices, check the installed security update date as well as the Android version, confirm that installation has completed, and track devices that cannot receive the required update. Do not mark a device compliant merely because its owner saw an update notification. The evidence should describe the software currently running, not an update that is available or waiting to activate."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "The Android Open Source Project’s bulletin index lists the November 2026 bulletin as published on 2 November, with security patch levels 2026-11-01 and 2026-11-05. These are patch-level labels, not a promise that every manufacturer has delivered an update to every device. This article uses that release as a timely operational checkpoint rather than asserting a specific exploit or universal device exposure."
+          },
+          {
+            "text": " Read the official guidance.",
+            "source": "bulletins"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "different-fields",
+        "text": "Know which field answers which question"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Google’s update instructions distinguish Android version, Android security update, Google Play system update and build number in device settings. They also explain that update schedules depend on the device, manufacturer and carrier. Capture those fields separately; one should not be silently substituted for another in an inventory report."
+          },
+          {
+            "text": " Read the official guidance.",
+            "source": "help"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "The Android version describes the platform release. A security patch date provides a different kind of update information, while the build number helps identify the particular installed build. In practice, your assessment needs the model and vendor guidance alongside those values. A newer-looking version number alone is not enough to answer whether a specific manufacturer’s security update is installed."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Avoid promising that a particular patch label means every application on the phone is secure. Business apps and their configurations still need their own maintenance. Likewise, the presence of an older date does not establish that someone exploited the device. Separate patch compliance from incident findings so that both can be investigated accurately."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "business",
+        "text": "Why mobile inventory deserves attention"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "An employee’s phone may provide access to work email, customer conversations, authentication prompts and shared documents. A small services business can have a mixed fleet of corporate phones, personal devices and training tablets. That variety makes a single instruction to update your phone difficult to verify."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Our recommended first step is to define which devices are permitted to access which work resources. A classroom demonstration tablet and a manager’s phone used for sensitive approvals do not necessarily have the same access needs. Prioritise based on business access, support status and the ability to enforce policy, not on brand preference."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "For personal devices, explain what information the organisation needs and why. Collect the minimum patch and support evidence necessary through the approved process; do not ask employees to expose private messages or photographs. A clear boundary between personal content and work-device compliance improves trust and makes the process easier to sustain."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "inventory",
+        "text": "Build an inventory with meaningful states"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Record device model, owner or custodian, ownership type, operating-system version, security patch date, build number and last verification time. Add the work services accessible from that device and the team responsible for resolving exceptions. Use approved management tooling where available, or a controlled manual process for a small fleet."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Distinguish at least four states: verified current against policy, update pending, support or rollout issue, and unknown. A device that has not checked in should not be counted as successfully updated. An update that is unavailable for a model should not be represented as employee refusal. Each state needs a different next action."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Check shared devices explicitly. They often lack a single person who notices update prompts or has permission to restart them. Assign a custodian and a maintenance window. Include spare and recovery devices that may return to service later, so an emergency replacement does not quietly reintroduce an obsolete build."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "deployment",
+        "text": "Install and verify without disrupting work"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Google advises checking for updates in Settings and notes that downloaded Pixel updates become active after a restart; many other devices restart during installation. Follow the device’s instructions and verify the result afterward. A download finishing is not necessarily the end of the update process."
+          },
+          {
+            "text": " Read the official guidance.",
+            "source": "help"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Before a managed rollout, choose representative devices and test essential work functions with non-sensitive test accounts where feasible. Check sign-in, required business apps and the organisation’s approved connectivity method. Record specific compatibility issues rather than delaying every device because of an unverified concern."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Schedule the rollout around business needs and provide a short explanation of the expected steps. Ensure users know whom to contact if storage, power or connectivity prevents completion. Do not encourage unofficial firmware downloads or disabling security controls to force an update. Use the vendor-supported update path."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "After installation, refresh the inventory evidence and compare it with the target policy. Retain enough detail to distinguish a successfully updated device from one whose previous state is merely cached in a dashboard. Sample a few results directly if your management workflow is new or has recently changed."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "exceptions",
+        "text": "Handle missing updates and unsupported devices"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "When an update is not offered, check the manufacturer’s support information for that exact model and region. Do not infer the support commitment from another phone with a similar name. Google notes that older devices cannot always run newer Android versions; the appropriate next step may require vendor clarification rather than repeated retries."
+          },
+          {
+            "text": " Read the official guidance.",
+            "source": "help"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Set a time-bounded exception where business use must continue. Record who accepted the residual risk, which work resources remain accessible and the review date. Depending on the situation, reduce sensitive access or provide a supported work device. Such measures are risk decisions, not equivalent substitutes for a missing patch."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Plan replacement before unsupported hardware becomes an urgent operational problem. Include security support in procurement criteria alongside price and performance. A cheap device can become expensive if maintaining access safely requires frequent exceptions, manual review or early replacement. Avoid declaring a universal replacement age; use actual vendor support and business requirements."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "evidence",
+        "text": "Keep incident response separate"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "If a phone displays suspicious behaviour or triggers a credible security alert, use the organisation’s incident process. Preserve relevant evidence and involve authorised responders. Installing an update may be part of remediation, but it does not by itself prove that earlier activity was harmless or revoke every potentially exposed account session."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Conversely, do not treat battery drain or a delayed update as proof of malware. Gather context, distinguish observations from assumptions and avoid unsupported attribution. This article provides a compliance workflow, not a detection rule for the November bulletin’s individual vulnerabilities."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "exercise",
+        "text": "An exercise for junior security practitioners"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Illustrative exercise: provide a synthetic inventory containing an updated phone, a device awaiting restart, an unknown device and a model awaiting vendor clarification. Ask trainees to classify each state, identify missing evidence and propose the next action. Include separate Android and Google Play update dates so they learn not to merge the fields."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "The deliverable should be a concise exception register and verification checklist. No exploit code, live customer accounts or invasive inspection of personal devices is needed. Review whether the trainee can explain what each piece of evidence proves and where uncertainty remains."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "takeaway",
+        "text": "The practical takeaway"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "A sustainable mobile patch programme is an evidence process: know the devices, use supported updates, verify activation and resolve exceptions. This article reflects official material reviewed on 4 November 2026. It does not claim that all devices have received November updates or that any particular CVE has been exploited in your environment."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "For structured defensive learning, explore CyberDefend Academy’s "
+          },
+          {
+            "text": "professional programmes",
+            "internal": "programmes"
+          },
+          {
+            "text": " and "
+          },
+          {
+            "text": "hands-on labs",
+            "internal": "labs"
+          },
+          {
+            "text": ". Practise turning update information into clear operational decisions."
+          }
+        ]
+      }
+    ]
+  },
+  {
     "slug": "barracuda-november-2026-admin-interface-patch-checklist",
     "title": "Barracuda November 2026 Advisory: Admin Access and Patch Checks",
     "description": "Assess Barracuda’s 2 November security advisory with product-specific patch checks, management-interface restrictions and evidence-based validation.",
