@@ -1,5 +1,183 @@
 [
   {
+    "slug": "synology-dsm-ransomware-nas-patch-restore-checks",
+    "title": "Synology DSM Ransomware: Check NAS Patches and Test Recovery",
+    "description": "Respond to Synology’s ransomware warning: check the exact DSM build, assess management access and verify that your NAS backups can actually be restored.",
+    "summary": "Synology reports attacks on outdated DSM devices. Match each NAS to its fixed build, then test whether you can recover business files without relying on the affected appliance.",
+    "author": "CyberDefend",
+    "datePublished": "2026-11-05",
+    "dateModified": "2026-11-05",
+    "category": "Ransomware recovery",
+    "sources": [
+      {
+        "id": "notice",
+        "title": "Synology ransomware notice, 29 October 2026",
+        "url": "https://www.synology.com/en-global/company/news/article/C3RB3R"
+      },
+      {
+        "id": "advisory",
+        "title": "Synology-SA-24:20: affected products and fixed builds",
+        "url": "https://www.synology.com/en-global/security/advisory/Synology_SA_24_20"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "heading",
+        "id": "warning",
+        "text": "What Synology confirmed"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "On 29 October 2026, Synology reported that attackers were targeting outdated DiskStation Manager (DSM) devices through a vulnerability patched in December 2024. The attackers’ aim was to encrypt data and demand payment. For administrators, the first question is not whether the NAS has an update badge. It is which build is running, who can reach it and whether the business can recover without trusting it. See "
+          },
+          {
+            "text": "Synology’s ransomware notice.",
+            "source": "notice"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "The notice points to an advisory covering several vulnerabilities but does not identify which CVE was used in the observed attacks. Avoid attaching a specific exploit to an incident without evidence. Equally, finding an old release establishes exposure, not compromise. A team needs two tracks: close the known vulnerability and separately investigate any signs that someone already used the access."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "build",
+        "text": "Read the entire DSM build number"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Record the model, installed DSM build including its update suffix, management address and accountable owner for each appliance. Start with systems serving several sites or holding the only readily accessible backup. Ask branch offices and service providers about appliances outside central management. A purchase register may list the model but not the software actually running today."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "For DSM 7.2.2, the advisory lists 7.2.2-72806-1 or later; for DSM 7.2.1, it lists 7.2.1-69057-6 or later. Those are different release lines, not interchangeable packages. Compare the entire string against the row for that appliance. These are minimum fixes for this advisory, not recommendations to remain on an old release. Consult the model’s supported upgrade path and current updates before scheduling work. Source: "
+          },
+          {
+            "text": "Synology-SA-24:20, affected products.",
+            "source": "advisory"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Illustrative example: a branch reports “DSM 7.2.2, automatic updates enabled.” That is not enough to close the ticket. Ask for the installed build from the device, not the version offered by its update screen. If nobody can access the appliance through an authorised administrative route, mark it unverified and assign an owner. Do not silently count an unreachable device as patched."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "access",
+        "text": "Draw the boundary around the backup"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "A network-attached storage appliance can serve staff files and also receive backup jobs. The important distinction is who can change each copy. If the same administrator can erase both the working share and every recovery point, the copies may fail together even when they sit on different disks. Map permissions as well as network connections: a backup account that writes new data need not automatically have authority to remove all history."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Trace one real recovery path. Where is the copy stored? Who controls deletion? Where are recovery credentials kept if the usual directory or password vault becomes unavailable? Ask the backup operator to answer without revealing any secret values. Record which steps depend on the NAS itself. A recovery key accessible only from the failed appliance is a circular dependency worth fixing before the next incident."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Review unnecessary external administration, router forwarding rules and access granted to former suppliers. Restrict management to approved paths and check that a named administrator can still use the recovery path after the restriction. Reduced reachability is useful while an update is organised, but the vendor advisory does not list a mitigation in place of its fix. Keep the patch ticket open."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "response",
+        "text": "Choose between maintenance and incident response"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "For a vulnerable appliance with no signs of intrusion, agree a maintenance window with the people who depend on it. Check the recovery copy before beginning. After the supported update, read back the installed build, check access to representative shares and confirm that scheduled backup jobs resume. Save those results against the asset. An installer reporting success does not tell the finance team whether tomorrow’s restore will work."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Unexpected bulk file changes, an unfamiliar administrator or a ransom demand calls for a different decision. Escalate to the incident lead, restrict affected connections and protect independent recovery copies from further writes. Preserve available logs and note the times, time zones and accounts involved before routine maintenance overwrites evidence. Investigate whether a client endpoint changed files through an authorised share or whether the appliance itself was compromised. Both can present as unreadable files; neither diagnosis follows from filenames alone."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "restore",
+        "text": "Run a restore that proves something"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Choose a small but meaningful workload with its owner: for example, a project directory containing documents with different permissions. Restore an agreed recovery point into an isolated destination, not over the production share. Have the owner open representative files, confirm the expected revision and test that access restrictions survived. Time the exercise from the request to usable access, not just the transfer between disks."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Record the recovery point’s age and elapsed recovery time separately. A fast restore can still return data too old for the business to use. If yesterday’s backup contains encrypted files, a successful job only proves those files were copied. Find an earlier candidate, validate it and document the gap. One successful directory restore is valuable evidence for that directory, not proof that every database or dependent application is recoverable."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "close",
+        "text": "What belongs in the closure note"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Leave the next shift with four facts: the build observed after maintenance, the remaining management access paths, the result of a recovery test and any unanswered incident questions. Where a model cannot reach a supported release, give the replacement plan a named owner and review date. Keep that exception separate from the patched inventory so management can see the risk it is still accepting."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "For a learner, a useful lab deliverable is a one-page evidence record from an authorised test appliance: before and after builds, a restore result and one limitation. For more hands-on learning, explore "
+          },
+          {
+            "text": "CyberDefend Academy’s labs.",
+            "internal": "labs"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "slug": "android-security-patch-level-business-device-checklist",
     "title": "Android Security Patch Levels: A Business Device Checklist",
     "description": "Verify Android security updates across work devices: distinguish version and patch dates, confirm installation and manage unsupported-device exceptions.",
