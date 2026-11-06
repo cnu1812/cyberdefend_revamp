@@ -1,5 +1,183 @@
 [
   {
+    "slug": "payment-api-fraud-transaction-authorization-cert-in",
+    "title": "Payment API Fraud: Verify the Transfer, Not Just the API Key",
+    "description": "Use CERT-In’s CRAFTY FALCON advisory to review payout approvals, detect unexplained debits and test changed beneficiaries without moving real money.",
+    "summary": "A valid credential can submit an unauthorised payout. Here is how to bind approval to the amount and beneficiary, reconcile the result and test the controls safely.",
+    "author": "CyberDefend",
+    "datePublished": "2026-11-06",
+    "dateModified": "2026-11-06",
+    "category": "Payment API security",
+    "sources": [
+      {
+        "id": "cert",
+        "title": "CERT-In: CRAFTY FALCON advisory, 4 November 2026",
+        "url": "https://cert-in.org.in/s2cMainServlet?VLCODE=CIAD-2026-0058&pageid=PUBVLNOTES02"
+      },
+      {
+        "id": "owasp",
+        "title": "OWASP: Transaction Authorization Cheat Sheet",
+        "url": "https://cheatsheetseries.owasp.org/cheatsheets/Transaction_Authorization_Cheat_Sheet.html"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "heading",
+        "id": "warning",
+        "text": "Why a successful API call can still be fraud"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "On 4 November 2026, CERT-In warned that a group it calls CRAFTY FALCON was using victims’ own payment and disbursement APIs to move funds. The agency reported repeat targeting, including after incomplete remediation, and attacks during periods with fewer staff monitoring systems. The finding comes from incidents reported to the agency; it is not evidence that any particular merchant or payment provider has been compromised. Read "
+          },
+          {
+            "source": "cert",
+            "text": "CERT-In advisory CIAD-2026-0058."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "For a team operating a payout API, the most useful question is simple: if someone obtains a valid application credential, what still prevents them from sending money to a different beneficiary? A dashboard may show that a known service made a perfectly formed request. Neither fact tells finance who approved the destination or why the payment was due. This guide focuses on that gap, not on identifying which AI tool an attacker used."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "trace",
+        "text": "Trace one transfer from decision to debit"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Pick one recent, legitimate disbursement and work backwards with a finance colleague. Start at the provider’s transaction reference, find the corresponding ledger entry and identify the instruction that authorised the payment. Which account was supposed to pay? Which beneficiary, currency and amount did the approver see? Can you show that these were the values actually sent? Use masked identifiers when sharing evidence beyond the investigation team."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "An API key identifies a caller, subject to how well the key has been protected. A business approval authorises a specific transfer. Reconciliation establishes what actually happened to the money. These are three different pieces of evidence. If the same service can invent an approval, change its beneficiary and submit the payment, three log entries from that service do not amount to three independent checks."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "bind",
+        "text": "Make approval follow the payment details"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "OWASP recommends enforcing transaction authorisation on the server and presenting significant transaction details to the person authorising them. Apply that principle to the final payout instruction rather than relying on an approval screen upstream. A decision should refer to a particular version of the instruction; changing its amount or destination should invalidate the decision. See "
+          },
+          {
+            "source": "owasp",
+            "text": "OWASP’s transaction authorisation guidance."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Illustrative example: an accounts officer approves a ₹48,000 supplier payment. Before the batch runs, a colleague corrects the supplier’s bank details. The correction might be legitimate. Nonetheless, the old approval covers the old beneficiary. The safe result is a pending payment awaiting approval of the revised details, not a completed transfer with a note that someone updated the supplier record."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Check the less visible paths too. A manually uploaded batch, a support console and an overnight retry can all reach the same payout service. Ask each owner where the final decision is enforced. For recurring automated payments, define the limits of delegated authority: approved destinations, amount ceilings, validity period and who may change them. Transactions outside that mandate should stop for review rather than quietly inherit a previous approval."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "monitor",
+        "text": "Alert on missing business evidence"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Start with one detection that finance and security can both interpret: a provider-confirmed outgoing payment with no matching approved instruction. Join the records using a stable transaction reference rather than amount alone; two unrelated customers can receive the same sum. Account for reporting lag by measuring how long legitimate records normally take to arrive. A late ledger entry is a reconciliation exception, not automatically a confirmed theft."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "A second useful signal is a beneficiary change followed closely by a payout from a workflow that seldom changes destinations. Include the operator, service identity, approval version and provider status in the investigation record. Do not put bank credentials, full account numbers or authentication headers into alerts. A reviewer needs enough context to suspend the right transaction path without giving everyone who receives the alert access to sensitive data."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Agree who answers that alert outside office hours. Can that person hold a pending batch? Do they have an independently verified channel to the provider’s fraud team? A dashboard that nobody checks until Monday offers little protection against a Friday-night transfer. Test the contact chain without live funds and record which decisions require an additional approver."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "respond",
+        "text": "When the provider and the ledger disagree"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "If an unexpected debit appears, preserve the provider reference, timestamps, approval history and relevant access logs. Have the authorised incident lead coordinate with the provider and finance team to establish whether the payment is pending, completed or uncertain. Do not automatically retry a timeout: the provider may already have accepted the original request. A local error message alone is not proof that no money moved."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Contain the affected payout route where feasible, protect evidence and investigate how the caller acquired access before restoring service. Rotating one key is not enough if the system that stores its replacement remains compromised. Conversely, stopping all customer collections may be unnecessary if the affected capability is limited to outbound disbursements. Document the scope and follow the organisation’s incident reporting process, including the reporting channels in the CERT-In advisory."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "exercise",
+        "text": "A no-money test for the next review"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "In an authorised sandbox, prepare an approved payment and change only its destination before execution. The expected result is a rejection or a new approval requirement, with no provider-side debit. Then simulate a lost response to an unchanged instruction. Check that the operator can determine its status without issuing a second transfer. Use synthetic beneficiaries and the provider’s test facilities; neither exercise requires a production key."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Capture the expected and observed outcome for each path. Passing these tests does not prove the whole platform secure, but it establishes something concrete: a changed payment cannot borrow yesterday’s approval, and an uncertain result does not have to become a duplicate. For teams practising this investigation, explore "
+          },
+          {
+            "internal": "labs",
+            "text": "CyberDefend Academy’s hands-on labs."
+          }
+        ]
+      }
+    ]
+  },
+  {
     "slug": "synology-dsm-ransomware-nas-patch-restore-checks",
     "title": "Synology DSM Ransomware: Check NAS Patches and Test Recovery",
     "description": "Respond to Synology’s ransomware warning: check the exact DSM build, assess management access and verify that your NAS backups can actually be restored.",
