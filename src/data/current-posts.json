@@ -1,5 +1,199 @@
 [
   {
+    "slug": "github-enterprise-dependabot-workflow-permissions-november-2026",
+    "title": "GitHub Enterprise: Review Dependabot Workflow Permissions",
+    "description": "Respond to GitHub Enterprise Server’s November security update with a focused review of Dependabot permissions, workflow changes and access to Actions secrets.",
+    "summary": "November’s GitHub Enterprise Server release adds a fix for a Dependabot workflow-write issue. Verify the appliance update and inspect the boundary between dependency updates and privileged automation.",
+    "author": "CyberDefend",
+    "datePublished": "2026-11-08",
+    "dateModified": "2026-11-08",
+    "category": "Software supply-chain security",
+    "sources": [
+      {
+        "id": "github",
+        "title": "GitHub Enterprise Server 3.22.3 release notes, 3 November 2026",
+        "url": "https://docs.github.com/en/enterprise-server@3.22/admin/release-notes"
+      },
+      {
+        "id": "canada",
+        "title": "Canadian Cyber Centre: GitHub advisory AV26-1126",
+        "url": "https://www.cyber.gc.ca/en/alerts-advisories/github-security-advisory-av26-1126"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "heading",
+        "id": "summary",
+        "text": "Patch the appliance and check the automation boundary"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "GitHub Enterprise Server’s 3 November 2026 security release includes an additional fix for CVE-2026-15343. The release notes describe a path from code execution inside a Dependabot updater container to unauthorised repository writes when the installation has workflows: write permission. An injected workflow could then reach Actions secrets, depending on repository permissions and workflow configuration. GitHub says an earlier fix was incomplete. See "
+          },
+          {
+            "source": "github",
+            "text": "GitHub’s 3.22.3 security release notes."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "This is not a claim that an ordinary dependency update automatically compromises a repository. The documented conditions matter. For operators of self-hosted GitHub Enterprise Server, the response should combine the relevant appliance update with a review of automation privileges. Teams using GitHub.com should not treat this as an instruction to install an Enterprise Server package. The product boundary is the first thing to establish."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "versions",
+        "text": "Match the update to the release line"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "The Canadian Cyber Centre’s 4 November notice identifies affected Enterprise Server ranges starting at 3.19.0, 3.20.0, 3.21.0 and 3.22.0, with update thresholds of 3.19.14, 3.20.10, 3.21.8 and 3.22.3 respectively. Consult the appropriate branch’s release notes and supported upgrade path; do not infer that unlisted older versions are safe. Source: "
+          },
+          {
+            "source": "canada",
+            "text": "Canadian Cyber Centre advisory AV26-1126."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Record the installed version from the running appliance, the owner of the platform and the proposed destination release. Include replicas and recovery environments in the change plan where relevant. A ticket saying that a package was downloaded is not proof that the running service changed. After the maintenance window, retain the observed version and the outcome of the normal repository and automation health checks."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "For a company running development infrastructure for several customers, distinguish ownership from use. A project team may administer its repositories without controlling the appliance release. Assign the platform update to the actual appliance operator and the repository permission review to the repository owners. Both teams should be able to see which part remains unfinished."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "permissions",
+        "text": "A dependency updater should not be an unexamined publisher"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "The general design question is what an automation identity can change after it has read dependency metadata. Updating a lockfile, creating a pull request, editing a workflow and publishing a release are different capabilities. Do not assume that one broad credential is necessary merely because all four actions happen somewhere in the delivery process. Map the actual identity and permissions used at each transition."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Review the permissions on the relevant Dependabot installation rather than copying settings from an unrelated bot or a personal access token. If workflow-writing permission is present, identify the business reason and the projects that depend on it. Any reduction should be tested through a normal update cycle. Treat permission changes as exposure reduction, not a substitute for the security release or proof that the previous deployment was never exploited."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Illustrative example: a service repository receives dependency pull requests automatically, but workflow changes normally require a platform engineer. Its owners should investigate an update that also alters deployment triggers. There may be an innocent explanation, such as an approved tooling migration. The useful control is that a person can see and evaluate that change before it gains production privileges, not that the bot’s display name looks familiar."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "review",
+        "text": "Inspect what changed and what ran"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Start with repositories that combine automated dependency updates and sensitive delivery workflows. Review recent changes to workflow definitions, the approvals attached to them and the corresponding runs. Note which commit each run used and whether it was associated with an expected change request. Preserve the relevant identifiers so another engineer can reproduce the review without needing a screenshot of every screen."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Investigate unusual workflow modifications, unexpected publishing steps or changes to the destination of build outputs. These are general review signals, not vendor-published indicators specific to this vulnerability. A workflow diff by itself does not establish malicious activity, and a successful job does not establish that it was authorised. Correlate the change with the maintainer and the intended release process."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "If a suspicious run could access a credential, scope what that credential permitted outside the repository. A deployment token may matter to a cloud account even after the workflow is removed. Follow the incident-response process for revocation, replacement and evidence preservation. Avoid placing secret values in tickets or chat while investigating; references to the credential and its authorised purpose are usually sufficient for coordination."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "validate",
+        "text": "Test the boundary without staging an exploit"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Use an authorised test repository with non-sensitive fixtures. Run a normal dependency update and verify that the expected files and pull request appear. Then review how the project handles a deliberate workflow change submitted through its normal development process. Confirm who must approve it and whether the resulting run can reach any protected deployment capability. Keep production credentials out of the exercise."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Write down the expected outcome before running the test. For example, the dependency update may be allowed to run ordinary tests while deployment remains unavailable until an authorised release decision. The exact configuration depends on the platform and repository design; this article is not a universal workflow recipe. A successful exercise validates the path tested, not every event trigger, runner or repository in the organisation."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "limits",
+        "text": "An additional fix means revisiting old closure notes"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "If the earlier advisory was already marked complete, reopen the relevant record and compare the evidence with this release. The important question is whether the installed version includes the additional fix, not whether the CVE number is already present in a spreadsheet. Record the new validation date without erasing the history of the previous remediation."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "The cited release notes describe the vulnerability and its prerequisites; they do not establish exploitation in your environment. This guide makes no claim of an active campaign. Keep patch status, permission-review findings and compromise assessment separate. That distinction prevents both unnecessary incident declarations and premature closure based solely on an upgrade."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "A useful learning deliverable is a short map of one repository’s automation identities, allowed writes and route to deployment. Pair it with a tested, non-sensitive example of a workflow change requiring review. For practical security learning, explore "
+          },
+          {
+            "internal": "labs",
+            "text": "CyberDefend Academy’s labs."
+          }
+        ]
+      }
+    ]
+  },
+  {
     "slug": "cisco-ucs-central-cve-2026-76506-upgrade-access-review",
     "title": "Cisco UCS Central CVE-2026-76506: Upgrade and Access Review",
     "description": "Identify affected UCS Central controllers, verify the fixed release and review management accounts without confusing patch completion with incident clearance.",
