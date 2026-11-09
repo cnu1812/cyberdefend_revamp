@@ -1,5 +1,208 @@
 [
   {
+    "slug": "keycloak-saml-signature-bypass-cve-2026-117691-response",
+    "title": "Keycloak SAML Signature Bypass: CVE-2026-117691 Response",
+    "description": "Review Keycloak’s SAML redirect-binding flaw, choose the correct fixed release stream and verify federated identities and access after the update.",
+    "summary": "A signature check must validate the message the application actually processes. Keycloak’s November fix makes federation inventory and post-upgrade identity checks timely priorities.",
+    "author": "CyberDefend",
+    "datePublished": "2026-11-09",
+    "dateModified": "2026-11-09",
+    "category": "Identity security",
+    "sources": [
+      {
+        "id": "release",
+        "title": "Keycloak 26.8.2 release, 5 November 2026",
+        "url": "https://www.keycloak.org/2026/11/keycloak-2682-released"
+      },
+      {
+        "id": "redhat",
+        "title": "Red Hat: CVE-2026-117691 product status",
+        "url": "https://access.redhat.com/security/cve/cve-2026-117691"
+      },
+      {
+        "id": "bug",
+        "title": "Red Hat technical record: Bug 2561977",
+        "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2561977"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "heading",
+        "id": "answer",
+        "text": "Update the identity service, then verify the federation path"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Keycloak 26.8.2, released on 5 November 2026, lists CVE-2026-117691 among its security fixes. The flaw concerns signature verification in the SAML HTTP-Redirect binding. For teams using Keycloak to broker external identities, the immediate task is to establish the deployed product and version, identify relevant federation routes and deploy the appropriate fixed build. Source: "
+          },
+          {
+            "source": "release",
+            "text": "Keycloak’s 26.8.2 release announcement."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Red Hat’s CVE record describes inconsistent interpretation of encoded parameter names between signature verification and message processing, with possible takeover of federated accounts. Its product table lists fixes for Red Hat build of Keycloak, including 26.6.9, issued on 7 November. Community Keycloak and a supported vendor build are different release streams: do not interchange their version numbers or packages. See "
+          },
+          {
+            "source": "redhat",
+            "text": "Red Hat’s product-specific CVE record."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "mechanism",
+        "text": "A valid signature must cover the message actually used"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "A signature check is useful only when the application acts on the same information that was verified. Here, two parts of the request-handling path disagree about how query parameter names should be interpreted. The security check and the login processing can therefore reach different conclusions about which message is present. That is a trust-boundary failure, not simply a weak password."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "The original Red Hat bug report states an important prerequisite: the attacker needs an account at the external identity provider to obtain a validly signed redirect-binding message. Preserve that detail when briefing stakeholders. “Unauthenticated at the target” does not mean the attacker has no relationship with any system in the federation. Source: "
+          },
+          {
+            "source": "bug",
+            "text": "Red Hat’s technical bug record."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "The operational lesson extends beyond this one product: a healthy upstream login does not independently prove that a downstream application accepted the correct identity. The two sides have separate responsibilities. The provider authenticates its user, while the receiving service must validate and interpret the resulting message consistently. This article does not reproduce an exploit or recommend sending crafted messages to production login endpoints."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "inventory",
+        "text": "Identify the affected route, not just the product name"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Start with the owner of each identity-service deployment and record its running version, distribution and image identity where applicable. List which external providers are configured and which applications depend on those relationships. Include non-production realms if they share meaningful identities, credentials or administrative access with production. A dormant pilot can still matter if somebody can reach it and authenticate."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Ask the identity team which routes use SAML HTTP-Redirect binding and how they verified that answer. An application inventory labelled “SSO enabled” is not enough: the protocol, binding and broker configuration determine the relevant path. If configuration evidence is unavailable, record the uncertainty and assign an owner. Do not mark the deployment unaffected merely because the analyst could not find its settings."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "For a services company integrating a customer’s identity provider, separate responsibilities explicitly. Your team may operate the broker while the customer controls the upstream provider. Agree who will test the login path and who can confirm the resulting application identity. Neither organisation should need to send production tokens or credentials to the other through email to coordinate the work."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "upgrade",
+        "text": "Use the correct release stream and retain evidence"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "For community deployments, the 26.8.2 announcement establishes that the fix is included there. For supported distributions or older branches, consult the matching vendor erratum and upgrade guidance rather than assuming a community release is the correct replacement. The announcement also directs administrators to the migration guide before upgrading. This guide does not assert a complete affected-version range for every distribution."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Prepare a change window with a recovery plan and the application owners whose sign-in flows will be tested. Capture the installed build before and after the change. Where a service runs across several instances, verify the active instances rather than assuming an updated deployment manifest proves every request reaches fixed software. Retain the image or package identity and the time of verification in the change record."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Avoid improvising a reverse-proxy rewrite as a permanent fix. A request filter can change normal federation traffic in unexpected ways, and its apparent success is not proof that the underlying verification mismatch is removed. Any temporary exposure reduction should have an owner and expiry, be tested for business impact, and remain distinct from a completed vendor update."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "tests",
+        "text": "Check identity and access after a normal login"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Use authorised test accounts with clearly different roles. Sign in through each relevant external-provider route and confirm which local account is selected and what the application permits it to do. Include a low-privilege account; checking only an administrator can conceal an unintended access expansion. Then exercise the normal sign-out and account-linking flows used by the organisation, where applicable."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Illustrative example: a partner portal has one test account that may view tickets and another that may manage customer settings. After the update, both users should arrive at their intended local identities and retain only the expected permissions. Record the account references and observed results without recording session cookies or assertion contents. This is a functional validation exercise, not a reproduction of the vulnerability."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Normal login tests establish availability and expected identity mapping; they do not demonstrate that every malformed message is rejected. If deeper assurance is required, use the organisation’s authorised security-testing process in an isolated environment. Keep test traffic and synthetic identities separate from real customers, and agree the stopping conditions with the identity-service owner before testing."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "investigation",
+        "text": "Do not confuse a patch with incident clearance"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Review available identity-provider, broker and application records for unexplained account mapping, new privileged access or sessions that do not match expected user activity. These are general investigation leads, not published indicators specific to this CVE. Preserve timestamps and correlation identifiers so the relevant teams can compare the same events across systems. Logging gaps should be documented as gaps, not interpreted as evidence that no misuse occurred."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "The cited sources establish a vulnerability and fixes, but this article does not claim an active exploitation campaign. If suspicious activity is found, involve the incident-response lead and assess affected sessions and accounts separately from the software update. Finish with a concise record of version evidence, federation routes reviewed, test outcomes and unresolved questions. Practise these evidence-based checks in "
+          },
+          {
+            "internal": "labs",
+            "text": "CyberDefend Academy’s hands-on labs."
+          }
+        ]
+      }
+    ]
+  },
+  {
     "slug": "github-enterprise-dependabot-workflow-permissions-november-2026",
     "title": "GitHub Enterprise: Review Dependabot Workflow Permissions",
     "description": "Respond to GitHub Enterprise Server’s November security update with a focused review of Dependabot permissions, workflow changes and access to Actions secrets.",
