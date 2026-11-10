@@ -1,5 +1,240 @@
 [
   {
+    "slug": "alpine-openssh-password-bypass-patch-verification",
+    "title": "Alpine OpenSSH Password Bypass: Patch and Verify Access",
+    "description": "A practical response to Alpine’s November OpenSSH advisory: identify exposed servers, update the right packages and verify running services and access.",
+    "summary": "The November OpenSSH fix highlights why package updates, running processes and authentication configuration must be verified together.",
+    "author": "CyberDefend",
+    "datePublished": "2026-11-10",
+    "dateModified": "2026-11-10",
+    "category": "Defensive engineering",
+    "sources": [
+      {
+        "id": "upstream",
+        "title": "OpenSSH 10.6p2 release, 5 November 2026",
+        "url": "https://www.openssh.org/txt/release-10.6p2"
+      },
+      {
+        "id": "alpine",
+        "title": "Alpine Linux: openssh-server password authentication bypass, 5 November 2026",
+        "url": "https://alpinelinux.org/posts/2026-11-05-openssh-password-authentication-bypass/"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "heading",
+        "id": "summary",
+        "text": "Update the server, not just the package inventory"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Portable OpenSSH 10.6p2, released on 5 November 2026, contains a security workaround for a password authentication bypass affecting certain Linux systems using musl libc with PAM disabled. The project describes the underlying cause as outside sshd, while implementing protection in sshd itself. This is not a claim that every SSH server or every Linux distribution is vulnerable."
+          },
+          {
+            "text": " Read the primary advisory.",
+            "source": "upstream"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Alpine’s advisory calls for updating OpenSSH and restarting sshd. It identifies password authentication, account password-field state and PAM configuration as relevant conditions. Systems that do not run sshd inside their containers are outside this particular exposure. The important operational distinction is between possessing an affected component and exposing the vulnerable authentication path."
+          },
+          {
+            "text": " Read the primary advisory.",
+            "source": "alpine"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "importance",
+        "text": "Why this matters to small teams and larger estates"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "For an Indian services business, SSH access may connect engineers to cloud workloads, build infrastructure and customer-support environments. A single inventory label such as “Linux server” is too broad to support a confident response. Teams need the distribution, package branch, service owner, network reachability and authentication policy. Customer systems must remain within the customer’s authorization and change-control boundaries."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Our recommended priority is to investigate reachable administrative services first, while also checking internal systems accessible from less-trusted workloads. Internet exposure is an urgency signal, not the definition of vulnerability. An internal service may still matter after another foothold is obtained. Equally, finding Alpine in an application image is not sufficient reason to declare that application exploitable through SSH."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "mechanism",
+        "text": "Authentication depends on more than the username"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "At a high level, a password verifier must distinguish successful computation from a library error. It must not interpret a failure representation as evidence that a supplied password matches an account. The OpenSSH release illustrates why security boundaries must remain explicit across application and operating-system libraries. A local account described informally as “key-only” also needs an effective server policy that enforces that expectation."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Alpine documents a combination involving password authentication enabled, an eligible account with an asterisk password field, and another local account with a SHA-256 or SHA-512-style password hash. Its advisory distinguishes the standard non-PAM server from PAM-enabled operation and explains why direct root access also depends on root-login policy. Consult those exact conditions instead of treating every account as equally exposed."
+          },
+          {
+            "text": " Read the primary advisory.",
+            "source": "alpine"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "inventory",
+        "text": "Build a small, actionable exposure register"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Create one record per running SSH service, not just one record per image repository. Include the owner, environment, operating-system branch, installed server-package revision, effective authentication configuration and approved management network. Record how the evidence was collected and when. Do not copy password hashes, private keys or customer secrets into a shared tracking spreadsheet."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Separate confirmed affected, confirmed mitigated and unresolved systems. An unresolved embedded appliance should have a named owner and vendor enquiry, not an invented patch status. For containers, verify whether the service actually runs and whether its port is published or reachable through internal networking. For cloud images, distinguish the template from instances already launched from it."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "update",
+        "text": "Plan the change and preserve recovery access"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Use the distribution’s branch-specific fixed package guidance. Upstream release numbers and distribution revisions are not interchangeable because a stable branch may carry a backported fix. Alpine publishes its fixed-package table and explicitly warns that upgrading alone does not replace the running daemon. Where patching is temporarily impossible, it describes disabling password authentication as a mitigation."
+          },
+          {
+            "text": " Read the primary advisory.",
+            "source": "alpine"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Before changing remote authentication, verify a working approved alternative and a recovery path. Keep an existing administrative session available while testing a new connection under your organization’s procedure. Arrange an appropriate maintenance window for systems where remote access supports operations. A hurried change that locks out the response team creates its own avoidable incident."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Treat the change as three separate milestones: install the correct package, activate the corrected service, and verify expected access. Capture evidence for each milestone in the change ticket. A package scanner becoming green does not independently prove the active process has changed. Conversely, a successful key login does not prove password authentication is disabled for every relevant connection context."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "verification",
+        "text": "Verify behavior without attempting exploitation"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Use configuration validation and approved positive and negative access checks. Confirm that an authorized administrator can still connect through the intended route. Confirm that a disallowed authentication method is rejected for the relevant account and connection context. Include conditional configuration and managed overrides in the review; inspecting a single configuration line is not the same as evaluating effective policy."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "An illustrative closure record might contain the fixed package revision, service restart time, effective policy evidence, successful authorized-login test and owner approval. This is a suggested evidence format, not a report of testing performed by CyberDefend. Avoid running public exploit scripts against production or customer infrastructure merely to obtain a more dramatic proof of remediation."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "detection",
+        "text": "Review access history and preserve evidence"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Alpine recommends investigating accepted password logins for accounts expected to have no password, together with privilege use and changes to users or authorized keys. Its advisory advises treating a machine as compromised if an unauthorized login cannot be ruled out."
+          },
+          {
+            "text": " Read the primary advisory.",
+            "source": "alpine"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Operationally, correlate authentication events with deployment activity and approved administrative sessions. Preserve available logs before rebuilding or rotating systems, and involve the incident-response owner where suspicious access appears. A successful authentication event deserves context: source address, account purpose, timing and subsequent activity. Do not automatically label an unfamiliar address malicious, especially where corporate gateways or managed access services are involved."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "limits",
+        "text": "Know what patching does not establish"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "This article does not establish that your infrastructure has been attacked, nor does it claim a confirmed production exploitation campaign. Missing logs are not proof of safety. Installing the fix closes the documented software path but cannot reverse actions taken during an earlier compromise. Incident recovery, where warranted, must consider exposed credentials and downstream trust separately."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Finally, update image-building and provisioning workflows so replacement systems do not reintroduce an old package. Assign an expiry date to temporary mitigations and recheck newly provisioned hosts. The reusable lesson is simple: inventory the actual authentication surface, apply the correct vendor fix, verify the running service and preserve enough evidence to explain the result."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "For structured practice in authorized defensive workflows, explore CyberDefend Academy’s "
+          },
+          {
+            "text": "practical labs",
+            "internal": "labs"
+          },
+          {
+            "text": "."
+          }
+        ]
+      }
+    ]
+  },
+  {
     "slug": "keycloak-saml-signature-bypass-cve-2026-117691-response",
     "title": "Keycloak SAML Signature Bypass: CVE-2026-117691 Response",
     "description": "Review Keycloak’s SAML redirect-binding flaw, choose the correct fixed release stream and verify federated identities and access after the update.",
