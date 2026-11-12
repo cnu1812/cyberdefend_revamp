@@ -1,5 +1,277 @@
 [
   {
+    "slug": "device-code-phishing-entra-access-controls",
+    "title": "Device Code Phishing: A Real Login Page Can Still Be a Trap",
+    "description": "Learn how device code phishing abuses legitimate sign-ins and how to review Entra authentication flows, investigate suspicious access and train staff.",
+    "summary": "Recent CIS reporting highlights device code phishing. The defensive question is not only where you sign in, but which device and workflow you are authorizing.",
+    "author": "CyberDefend",
+    "datePublished": "2026-11-12",
+    "dateModified": "2026-11-12",
+    "category": "Identity security",
+    "sources": [
+      {
+        "id": "cis",
+        "title": "CIS CTI: Device Code Phishing, November 2026",
+        "url": "https://www.cisecurity.org/insights/blog/device-code-phishing-evolving-technique-impacting-sltts"
+      },
+      {
+        "id": "policy",
+        "title": "Microsoft: Block authentication flows with Conditional Access",
+        "url": "https://learn.microsoft.com/en-us/entra/identity/conditional-access/policy-block-authentication-flows"
+      },
+      {
+        "id": "flows",
+        "title": "Microsoft: Conditional Access authentication flows",
+        "url": "https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-authentication-flows"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "heading",
+        "id": "answer",
+        "text": "Check what you authorize, not only the domain"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "A genuine identity-provider login page is not enough to prove that a request is safe. Device code phishing persuades a person to authorize a sign-in initiated elsewhere. The defensive response is to restrict unnecessary device code flows, investigate unfamiliar authorizations and teach staff to question unsolicited codes. This is an abuse of a legitimate workflow, not a newly discovered software flaw requiring a single patch."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "CIS CTI’s November report describes incidents affecting U.S. State, Local, Tribal and Territorial organizations in which document-review lures led users to approve device authorization requests. Those observations are not evidence of a specific Indian campaign. They are nevertheless relevant to businesses using similar cloud identity services and document-sharing workflows."
+          },
+          {
+            "text": " Read the source guidance.",
+            "source": "cis"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "mechanism",
+        "text": "Why the familiar login screen can mislead"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Device code flow has legitimate uses, including signing into devices with limited input capabilities. Microsoft identifies it as a higher-risk authentication method and recommends allowing it only where necessary. Blocking it is a policy decision that should account for legitimate dependencies, rather than an assumption that every use is malicious."
+          },
+          {
+            "text": " Read the source guidance.",
+            "source": "flows"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "In the attack pattern CIS describes, a code presented as an access or verification requirement is actually connected to an attacker-initiated authorization. Completing the genuine provider’s interface can grant the wrong device access. The important distinction is between verifying your identity and deciding which request should receive that identity’s privileges."
+          },
+          {
+            "text": " Read the source guidance.",
+            "source": "cis"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "For staff, a useful mental model is a remote approval: would you approve a new device merely because someone sent you a number? A secure page protects the connection to the provider; it does not establish that the business reason supplied by the sender is truthful. This is why domain inspection remains useful but cannot be the only training message."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "business",
+        "text": "Apply the lesson to everyday business workflows"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Recruitment teams receive resumes and interview documents, finance teams receive invoices, and technical teams receive shared project files. Each workflow creates plausible reasons for someone to ask a colleague to review content. The appropriate response is not to stop collaboration, but to define an expected sharing route and a clear way to verify unusual requests independently."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "For an Indian company working with global clients, agree on approved document platforms and escalation contacts during onboarding. If a request unexpectedly changes the sign-in procedure, confirm it through an established conversation or independently known contact. Do not rely on contact details supplied only in the suspicious message. Familiar branding and a previously trusted sender are context, not authorization."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "audit",
+        "text": "Find legitimate uses before changing policy"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Microsoft recommends auditing device code usage and using a report-only policy before enforcement. Its policy guidance calls for blocking the flow where it is unnecessary and keeping necessary exceptions documented and secured. Emergency access accounts require careful treatment so a mistaken policy does not lock administrators out."
+          },
+          {
+            "text": " Read the source guidance.",
+            "source": "policy"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Build an inventory of the business purpose, account owner, application and device involved in each approved use. Ask whether the dependency is still needed and whether a supported alternative exists. Do not grant a broad department-wide exception simply because one shared device needs the flow. Define an accountable owner and a review date for every exception."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "A short discovery period can miss infrequent workflows. Include monthly operations, onboarding and device recovery in your review rather than assuming that a quiet week proves absence of need. Record this limitation explicitly. This is a recommended operational approach, not a claim that CyberDefend has inspected your tenant or tested its policies."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "controls",
+        "text": "Roll out restrictions with a recovery plan"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Microsoft’s documented approach selects Device code flow under the Authentication Flows condition, applies Block access and begins in Report-only before moving to enforcement after review. Confirm your tenant’s licensing, administrative permissions and actual policy availability before implementation. Report-only provides observation; it does not itself stop an attacker."
+          },
+          {
+            "text": " Read the source guidance.",
+            "source": "policy"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Use a controlled test group and approved test accounts to exercise expected access and expected denial. Verify that support staff know how to identify the policy responsible for a block. Preserve a tested administrative recovery path and obtain the appropriate change approval. The goal is a restriction you can explain and maintain, not a configuration change whose side effects appear only during an outage."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Microsoft documents protocol tracking: a session that originated through device code flow can remain subject to flow policy during subsequent refreshes. Its sign-in logs expose an original transfer method field for troubleshooting. Therefore, a later blocked event need not look like the original device-code interaction. Evaluate the session context, not just one event label."
+          },
+          {
+            "text": " Read the source guidance.",
+            "source": "flows"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "detection",
+        "text": "Investigate unfamiliar authorizations in context"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Review device-code sign-ins against the approved-use inventory. Prioritize events involving accounts without a documented reason to use the flow, unexpected applications or unexplained timing. These are investigation leads, not automatic proof of compromise. A travelling employee, a deployment change or a legitimate shared device can produce unusual-looking activity."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Capture the relevant event times, account, application, resource and policy result before drawing conclusions. Correlate with the user’s account of what they were asked to do and any available downstream activity. Avoid collecting tokens or sensitive customer content into an ordinary support ticket. Preserve suspicious messages through the organization’s approved reporting process rather than forwarding live links to a large group."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "response",
+        "text": "Treat an approved malicious request as an access incident"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "If a user reports entering an unsolicited code, do not dismiss the incident because the login page was genuine or because the password was never disclosed. Escalate promptly to the identity or incident-response owner. Determine what authorization occurred and what resources were accessed. Containment should follow the provider’s supported procedures and your organization’s authority boundaries."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "CIS discusses token-based access and persistence, including rogue device registrations and altered email rules. Its reporting is a reason to investigate more than password exposure, not a reason to assume every reported click produced every persistence mechanism. Review relevant sessions, registrations and mailbox changes according to the evidence."
+          },
+          {
+            "text": " Read the source guidance.",
+            "source": "cis"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "A password reset alone should not be the closure criterion. Establish which sessions and authorizations require revocation, whether unauthorized changes remain, and whether recovery actions have taken effect. Document uncertainty where logs are missing. Keep access recovery and evidence preservation coordinated so remedial work does not unnecessarily destroy information needed to understand the incident."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "practice",
+        "text": "Give staff one clear rule and a safe exercise"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "The practical rule is: do not enter a code from an unsolicited document-sharing or support request unless you independently initiated and understand the authorization. Provide a fast reporting route and reassure staff that early reporting is more valuable than concealing a mistake. Training should explain the unfamiliar workflow, not merely blame users for trusting a real login page."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "For an illustrative tabletop exercise, show a fictional document invitation and ask learners to identify the claimed business purpose, the unexpected authorization step and the independent verification route. Do not collect real credentials or issue live tokens. The exercise succeeds when participants can explain what they would authorize and who would receive access."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Practice identity-response reasoning in authorized environments through CyberDefend Academy’s "
+          },
+          {
+            "text": "hands-on labs",
+            "internal": "labs"
+          },
+          {
+            "text": ". Policy controls, usable reporting and evidence-led investigation work together; none is a universal guarantee against phishing."
+          }
+        ]
+      }
+    ]
+  },
+  {
     "slug": "chrome-cve-2026-125350-relaunch-verification",
     "title": "Chrome CVE-2026-125350: Close the Relaunch Gap",
     "description": "Respond to Chrome’s November XML security fix with a practical browser inventory, relaunch verification and exception-handling plan for business devices.",
