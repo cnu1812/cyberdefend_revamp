@@ -5295,5 +5295,280 @@
         ]
       }
     ]
+  },
+  {
+    "slug": "gpustack-cve-2026-102895-ai-management-plane-security",
+    "title": "GPUStack CVE-2026-102895: Secure the AI Management Plane",
+    "description": "GPUStack versions before 2.2.0 are affected by CVE-2026-102895. Learn how loopback trust, reverse proxies and persistent API keys change incident response.",
+    "summary": "A critical authentication bypass in GPUStack shows why localhost must never stand in for identity. Upgrade, review proxy trust and investigate persistent access.",
+    "author": "CyberDefend",
+    "datePublished": "2026-11-13",
+    "dateModified": "2026-11-13",
+    "category": "AI infrastructure security",
+    "sources": [
+      {
+        "id": "vendor",
+        "title": "GPUStack: GHSA-gj9m-f8ph-pmhr security advisory",
+        "url": "https://github.com/advisories/GHSA-gj9m-f8ph-pmhr"
+      },
+      {
+        "id": "release",
+        "title": "GPUStack v2.2.0 release notes",
+        "url": "https://github.com/gpustack/gpustack/releases/tag/v2.2.0"
+      },
+      {
+        "id": "nvd",
+        "title": "NIST National Vulnerability Database: CVE-2026-102895",
+        "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-102895"
+      },
+      {
+        "id": "kev",
+        "title": "CISA Known Exploited Vulnerabilities Catalog: CVE-2026-102895",
+        "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog?search_api_fulltext=CVE-2026-102895"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "heading",
+        "id": "quick-answer",
+        "text": "The short answer: upgrade and review the trust boundary"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "GPUStack is an open-source platform for managing GPU resources and serving AI models. CVE-2026-102895 is a critical authentication bypass affecting versions before 2.2.0; the vendor identifies 2.2.0 as the fixed release. In affected versions, a request treated as coming from the local loopback address could be promoted to the built-in administrator when `force_auth_localhost` was false, which was the default. A remote request could appear local through a same-host reverse proxy or a forged client-IP header. "
+          },
+          {
+            "text": "The vendor advisory documents the affected versions and trust paths.",
+            "source": "vendor"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "The issue carries a CVSS 3.1 score of 9.8. The vendor says it observed exploitation against a GPUStack 2.1.1 deployment, including attacker-created custom backends that ran reverse shells. CISA added the CVE to its Known Exploited Vulnerabilities catalog on 9 November 2026. Operators should treat exposed, unpatched management servers as a priority for remediation and compromise assessment. "
+          },
+          {
+            "text": "The CVE record is available from NIST.",
+            "source": "nvd"
+          },
+          {
+            "text": " View the CISA KEV entry.",
+            "source": "kev"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "how-it-works",
+        "text": "How localhost became an authentication signal"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Loopback addresses such as 127.0.0.1 are useful for limiting a service to its own host. They are not proof of a person's or workload's identity. Vulnerable GPUStack logic used the apparent source address as a shortcut to administrator trust. That shortcut breaks when a reverse proxy on the same machine connects to the application over loopback: GPUStack sees the proxy's local connection even though the original request came from elsewhere on the network. The proxy changed the network path; it did not authenticate the user."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "The advisory describes a second route in which a client-supplied `X-GPUStack-Real-IP` value could make a request appear to originate from 127.0.0.1. Client-address metadata is trustworthy only when the application can establish that it was set by a trusted gateway and cannot be supplied or preserved from an untrusted client. "
+          },
+          {
+            "text": "GPUStack's advisory explains both paths and the corrected handling in 2.2.0.",
+            "source": "vendor"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "This is an authentication design failure at a trust boundary. It is not enough to ask whether the API listens on a private interface or whether a proxy is present. Administrators must understand which peer the application actually sees, which forwarding headers it accepts, and whether those values can influence authorization. A network location can inform access policy, but it must not silently become an administrator credential."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "business-impact",
+        "text": "Why an AI management-plane compromise matters"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "GPUStack manages more than a public model endpoint. Its administrative functions can affect users, models, workers and deployment configuration. The vendor advisory says exploitation can allow an attacker to create persistent administrator API keys, access worker credentials and cloud or provider secrets, and use privileged backend-management functionality to execute code on worker hosts. A compromised control plane can therefore expose both the AI service and connected infrastructure. "
+          },
+          {
+            "text": "The advisory describes the available privileges and observed worker impact.",
+            "source": "vendor"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "exposure-review",
+        "text": "Determine whether your deployment is exposed"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Start with an inventory. AI experimentation can create development, research and proof-of-concept environments outside the central production catalogue. Search approved software inventories, Python environments, container registries and deployment manifests for GPUStack servers and replicas. Identify the version actually running, not just the version recorded in a source file or image tag."
+          }
+        ]
+      },
+      {
+        "type": "list",
+        "items": [
+          [
+            {
+              "text": "Confirm the version. Any release before 2.2.0 is in the vendor's affected range. Record the running server build and deployed package or image digest. "
+            },
+            {
+              "text": "Compare it with the fixed release.",
+              "source": "release"
+            }
+          ],
+          [
+            {
+              "text": "Map the request path. Document whether a reverse proxy runs on the same host, connects upstream through loopback, and which gateways can reach the management API."
+            }
+          ],
+          [
+            {
+              "text": "Review client-IP handling. Determine whether `X-GPUStack-Real-IP` is accepted, whether the edge removes client-supplied copies, and whether only a trusted proxy can set it."
+            }
+          ],
+          [
+            {
+              "text": "Check the setting. Verify the effective value of `force_auth_localhost`; do not assume a configuration change reached every running replica."
+            }
+          ],
+          [
+            {
+              "text": "Assess reachability. Identify public exposure, broad internal access, VPN boundaries and systems or secrets reachable from GPUStack workers."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "patch-and-contain",
+        "text": "Patch the software and remove unsafe trust paths"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Upgrade affected deployments to GPUStack 2.2.0 or later, following the vendor's release and deployment guidance. Verify that the new version is running after rollout: pulling an image, changing a manifest or updating a package lock does not prove every server process restarted on fixed code. For replicated deployments, verify each active instance and retain the version and deployment digest. "
+          },
+          {
+            "text": "The v2.2.0 release is the vendor's identified fixed version.",
+            "source": "release"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "If an immediate upgrade is not possible, the vendor's workaround is to set `force_auth_localhost=true` so loopback requests still require authentication. Treat this as temporary and test legitimate local automation before enforcing it. Keep the management API off untrusted networks, restrict access through a VPN or controlled administrative gateway, and ensure the proxy cannot cause remote traffic to be classified as loopback. Strip client-supplied `X-GPUStack-Real-IP` values at the edge and have a trusted gateway set the value itself. Header filtering reduces one path; it does not replace the software fix or network isolation. "
+          },
+          {
+            "text": "These interim measures are listed in the vendor advisory.",
+            "source": "vendor"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "incident-response",
+        "text": "If a server was exposed, investigate before closing the ticket"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "A successful bypass may leave access behind after the vulnerable code is updated. The vendor notes that an attacker could mint persistent administrator API keys. Review administrator accounts and API keys, identify anything that cannot be tied to an authorised owner or change, and revoke suspicious or unrecognised credentials. Rotate worker, cloud and model-provider secrets that may have been readable from the environment. "
+          },
+          {
+            "text": "The persistence risk is described in the vendor advisory.",
+            "source": "vendor"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Review logs for unexpected user or key creation, model and backend changes, worker registration changes, configuration edits and unusual administrative activity. On workers, investigate unfamiliar processes, altered startup configuration and unexpected outbound connections. The vendor's report of attacker-created custom backends and reverse shells makes backend history and worker process evidence especially relevant, but do not assume every incident will leave the same artefacts. "
+          },
+          {
+            "text": "The observed exploitation involved custom backends on a 2.1.1 deployment.",
+            "source": "vendor"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Preserve relevant logs and deployment records before rebuilding or rotating systems. If there is evidence of unauthorised worker execution, isolate affected nodes, determine which credentials and connected services were reachable, and rebuild from known-good images where warranted. Follow your incident-response process and involve security responders if you cannot establish the scope."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "safe-validation",
+        "text": "Validate the fix without turning production into a test range"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Use a controlled staging environment or authorised maintenance window to verify that unauthenticated remote requests cannot reach administrative functions through either the direct service path or the reverse-proxy path. Confirm that the gateway overwrites or removes untrusted client-IP metadata and that the application accepts forwarding information only from the intended proxy. A harmless unauthenticated request to a read-only administrative route should be denied; do not run exploit scripts or custom-backend payloads against a live production service."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "limits-and-takeaways",
+        "text": "What the advisory confirms—and what it does not"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "The vendor identifies versions before 2.2.0 as affected, names 2.2.0 as the fix and reports exploitation against a 2.1.1 deployment. CISA's KEV listing is a strong prioritisation signal because it records known exploitation. Neither fact proves that every GPUStack installation is exposed or compromised. Version, effective authentication setting, proxy topology and network reachability determine practical risk. The public advisory does not provide a complete list of affected organisations or attribute the activity to a named actor. "
+          },
+          {
+            "text": "Check the CVE record and current catalog entry for updates.",
+            "source": "nvd"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "The lasting lesson is simple: localhost is a network location, not an identity. AI infrastructure needs explicit authentication at every management boundary, strict control over proxy metadata, limited worker privileges and a credential-recovery plan that assumes an attacker may have created access before a patch was installed. For more practical defensive guidance, explore the "
+          },
+          {
+            "text": "CyberDefend Academy insights",
+            "internal": "resources"
+          },
+          {
+            "text": "."
+          }
+        ]
+      }
+    ]
   }
 ]
