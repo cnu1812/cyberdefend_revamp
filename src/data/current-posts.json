@@ -1,5 +1,387 @@
 [
   {
+    "slug": "the-gentlemen-ransomware-cert-in-network-containment-guide",
+    "title": "The Gentlemen Ransomware: Stop Lateral Movement Before Encryption",
+    "description": "CERT-In’s 13 November 2026 alert explains The Gentlemen ransomware. Learn how to reduce remote-access exposure, detect lateral movement and protect recovery.",
+    "summary": "CERT-In warns that The Gentlemen combines data theft, encryption and self-propagation. The priority is to stop one compromised account or edge device from becoming a network-wide incident.",
+    "author": "CyberDefend",
+    "datePublished": "2026-11-14",
+    "dateModified": "2026-11-14",
+    "category": "Ransomware defence",
+    "sources": [
+      {
+        "id": "certin",
+        "title": "CERT-In Advisory CIAD-2026-0060: The Gentlemen Ransomware (13 November 2026)",
+        "url": "https://cert-in.org.in/s2cMainServlet?VLCODE=CIAD-2026-0060&pageid=PUBVLNOTES02"
+      },
+      {
+        "id": "microsoft",
+        "title": "Microsoft Threat Intelligence: The Gentlemen ransomware — dissecting a self-propagating Go encryptor",
+        "url": "https://www.microsoft.com/en-us/security/blog/2026/05/28/the-gentlemen-ransomware-dissecting-a-self-propagating-go-encryptor/"
+      },
+      {
+        "id": "mitre",
+        "title": "MITRE ATT&CK: The Gentlemen Ransomware (S9051)",
+        "url": "https://attack.mitre.org/software/S9051/"
+      },
+      {
+        "id": "ncsc",
+        "title": "UK National Cyber Security Centre: Mitigating malware and ransomware attacks",
+        "url": "https://www.ncsc.gov.uk/guidance/mitigating-malware-and-ransomware-attacks"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "heading",
+        "id": "short-answer",
+        "text": "The short answer: contain access before the encryptor runs"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "CERT-In published advisory CIAD-2026-0060 on 13 November 2026 describing The Gentlemen, a financially motivated ransomware-as-a-service operation. Its warning is important because the threat is not limited to encrypting files on one computer. The advisory describes data theft before encryption, lateral movement across compromised networks and self-propagation. It also identifies Windows, Linux, BSD, network-attached storage (NAS) and VMware ESXi environments as potential targets. "
+          },
+          {
+            "text": "Read the CERT-In advisory and its indicators of compromise.",
+            "source": "certin"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "For defenders, the practical objective is to prevent an initial foothold—such as a compromised remote-access account or exposed edge device—from becoming access to domain controllers, file shares, virtualisation hosts and backups. A ransomware response therefore has to cover identity, network boundaries, endpoint controls, data movement and recovery, not just malware detection on laptops."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "what-certin-reports",
+        "text": "What the November advisory says"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "CERT-In describes a double-extortion model: attackers take sensitive information and encrypt files, then threaten to disclose the stolen data if the victim does not pay. It reports that initial access may come through vulnerabilities in internet-facing edge devices and remote-access services—including RDP, cPanel and VPNs—or through compromised credentials. The advisory then describes reconnaissance, use of legitimate administration utilities, credential abuse, scheduled tasks and automated propagation. "
+          },
+          {
+            "text": "These behaviours are documented in CIAD-2026-0060.",
+            "source": "certin"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "The advisory says the ransomware is written in Go and uses Garble obfuscation. Microsoft Threat Intelligence’s earlier technical analysis also describes a Go-based encryptor and details how its operators can combine local-system and network-share activity. MITRE ATT&CK records techniques associated with the malware, including registry-based persistence, NETLOGON logon-script distribution, Group Policy modification, defence impairment and recovery inhibition. "
+          },
+          {
+            "text": "Compare the technical research",
+            "source": "microsoft"
+          },
+          {
+            "text": " with the "
+          },
+          {
+            "text": "MITRE ATT&CK software profile.",
+            "source": "mitre"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "These are reported capabilities and observed behaviours, not a claim that every intrusion follows an identical sequence. The CERT-In advisory does not identify one CVE, one affected software version or one patch that removes the threat. Organisations need to assess their own exposed services, credentials, network design and telemetry."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "attack-path",
+        "text": "How a remote foothold can become a wider incident"
+      },
+      {
+        "type": "list",
+        "items": [
+          [
+            {
+              "text": "Initial access: "
+            },
+            {
+              "text": "An exposed remote service, vulnerable edge appliance or reused credential gives an attacker a starting point. Treat public-facing VPNs, remote desktops, hosting panels and management interfaces as part of the security boundary, not routine infrastructure to forget after deployment."
+            }
+          ],
+          [
+            {
+              "text": "Discovery and privilege: "
+            },
+            {
+              "text": "The intruder maps systems, accounts and network shares, then looks for credentials and privileges that can reach more valuable systems. An account that can administer endpoints, file servers and backup consoles can turn a local compromise into an enterprise incident."
+            }
+          ],
+          [
+            {
+              "text": "Lateral movement and persistence: "
+            },
+            {
+              "text": "CERT-In describes abuse of scheduled tasks, administrative tools, Group Policy Objects and privileged domain accounts. Microsoft and MITRE document how The Gentlemen can use network shares and domain mechanisms to spread. "
+            },
+            {
+              "text": "See the MITRE technique mapping.",
+              "source": "mitre"
+            }
+          ],
+          [
+            {
+              "text": "Defence impairment and impact: "
+            },
+            {
+              "text": "The advisory describes attempts to disable security products, stop backup services, remove recovery data and clear logs before encryption. Data may also be transferred out before files are locked, so restoring from backup alone may not address the confidentiality impact."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "detection",
+        "text": "Build detection around behaviour, not one file hash"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "CERT-In provides file hashes and network indicators in the advisory. Add relevant indicators to your security controls after checking their format, source and operational context. They can help identify known infrastructure or samples, but they are snapshots: a clean hash match does not prove a host is safe, and an IP address may be shared or reassigned. Pair indicator matching with activity that shows how an account or machine is behaving. "
+          },
+          {
+            "text": "The published indicators are in the official notice.",
+            "source": "certin"
+          }
+        ]
+      },
+      {
+        "type": "list",
+        "items": [
+          [
+            {
+              "text": "Remote-access changes: "
+            },
+            {
+              "text": "Review unusual RDP, VPN and hosting-panel logins, new source locations, repeated failures followed by success, unexpected account recovery and access outside approved maintenance windows."
+            }
+          ],
+          [
+            {
+              "text": "Domain and privilege changes: "
+            },
+            {
+              "text": "Alert on unexpected administrator membership changes, new privileged accounts, Group Policy edits, scheduled-task creation and changes to NETLOGON or SYSVOL content. Confirm whether each change maps to an authorised ticket and administrator."
+            }
+          ],
+          [
+            {
+              "text": "Security-control tampering: "
+            },
+            {
+              "text": "Investigate attempts to stop EDR or antivirus services, alter Defender exclusions, disable firewall profiles, stop backup agents or clear Windows event logs. A legitimate maintenance action should have a known owner, scope and change record."
+            }
+          ],
+          [
+            {
+              "text": "Unusual lateral movement: "
+            },
+            {
+              "text": "Look for one workstation or server suddenly connecting to many peers over administrative protocols, accessing shares it does not normally use, or launching remote-management utilities from an unexpected account."
+            }
+          ],
+          [
+            {
+              "text": "Data staging and transfer: "
+            },
+            {
+              "text": "Review unexpected use of file-transfer tools such as WinSCP, large outbound transfers from file servers and unusual access to sensitive directories. The tool itself is not malicious; context, destination, account and timing matter."
+            }
+          ],
+          [
+            {
+              "text": "Cross-platform coverage: "
+            },
+            {
+              "text": "Include NAS management, Linux and BSD servers, and VMware ESXi in asset inventory and monitoring. A Windows-only response plan can leave storage and virtualisation infrastructure outside the investigation."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Centralise identity, endpoint, firewall, VPN, server and backup logs in a system that an administrator on a single compromised host cannot erase. Retain enough history to compare activity before and after the first suspicious login. The NCSC’s ransomware guidance also recommends layered controls and preparation on the assumption that some malware may get inside. "
+          },
+          {
+            "text": "Review its defensive guidance.",
+            "source": "ncsc"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "priority-controls",
+        "text": "A practical containment plan for Indian organisations"
+      },
+      {
+        "type": "list",
+        "items": [
+          [
+            {
+              "text": "Map the external attack surface. "
+            },
+            {
+              "text": "List public IP addresses, remote-access gateways, hosting panels, VPN appliances and exposed management ports. Remove services that are not required; restrict necessary access to trusted networks or managed access gateways. Patch edge devices promptly and verify firmware versions after maintenance."
+            }
+          ],
+          [
+            {
+              "text": "Strengthen remote identity. "
+            },
+            {
+              "text": "Require MFA for remote access, remove stale accounts, disable unused RDP paths and review third-party access. Use separate administrator accounts for privileged work; avoid using domain-admin credentials for routine email, browsing or workstation activity."
+            }
+          ],
+          [
+            {
+              "text": "Limit what one account can reach. "
+            },
+            {
+              "text": "Segment domain controllers, user endpoints, production servers, NAS devices, ESXi management and backup infrastructure. Restrict SMB administrative shares and remote administration to designated systems. Review service-account permissions and rotate credentials that may have been exposed."
+            }
+          ],
+          [
+            {
+              "text": "Protect policy and recovery mechanisms. "
+            },
+            {
+              "text": "Restrict who can edit Group Policy and NETLOGON/SYSVOL content. Alert on changes and require peer review for high-impact domain policies. Keep backup administration separate from ordinary domain administration."
+            }
+          ],
+          [
+            {
+              "text": "Make backups difficult to destroy. "
+            },
+            {
+              "text": "Maintain offline or immutable copies in a separate security boundary, use dedicated backup identities with MFA, and prevent production administrators from deleting every recovery copy. Test restoration of representative business systems—not just whether a backup job reports success."
+            }
+          ],
+          [
+            {
+              "text": "Harden endpoints and servers. "
+            },
+            {
+              "text": "Keep EDR tamper protection enabled, use application control where practical and forward security logs off-host. Monitor PowerShell, service creation, scheduled tasks, firewall changes and security-agent status. Tune alerts with system owners so approved administration is distinguishable from unexpected activity."
+            }
+          ],
+          [
+            {
+              "text": "Exercise the response. "
+            },
+            {
+              "text": "Rehearse who can isolate a network segment, disable compromised credentials, protect backups, contact service providers and make recovery decisions. Include business owners because payment processing, customer support and operational technology may depend on systems outside the IT team’s immediate view."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "suspected-compromise",
+        "text": "If you suspect an intrusion"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Do not wait for a ransom note if you see coordinated account abuse, security-tool tampering, unusual share access and suspicious data movement. Activate your incident-response process, involve the people responsible for identity, network, endpoint, backup and legal decisions, and use an out-of-band communication channel if normal collaboration systems may be compromised."
+          }
+        ]
+      },
+      {
+        "type": "list",
+        "items": [
+          [
+            {
+              "text": "Contain deliberately. "
+            },
+            {
+              "text": "Isolate affected endpoints and network segments using your response plan. If multiple systems are involved, coordinate containment at the network boundary rather than relying on one user to disconnect one device at a time."
+            }
+          ],
+          [
+            {
+              "text": "Preserve evidence. "
+            },
+            {
+              "text": "Protect central logs, identity events, firewall records, endpoint telemetry and backup-console activity. Record affected assets, timestamps and containment actions. Avoid wiping or rebuilding systems before responders have considered evidence preservation."
+            }
+          ],
+          [
+            {
+              "text": "Recover from known-clean sources. "
+            },
+            {
+              "text": "Identify the initial access route, remove unauthorised persistence, reset affected credentials and rebuild systems where needed. Verify backup integrity and scan restored data before reconnecting it to production."
+            }
+          ],
+          [
+            {
+              "text": "Address data exposure. "
+            },
+            {
+              "text": "Determine what information may have left the environment, which people or customers could be affected and which contractual or regulatory notifications apply. Follow applicable Indian incident-reporting requirements and report to CERT-In as required."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "limits",
+        "text": "What the alert does—and does not—establish"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "The advisory describes a ransomware operation, its reported techniques, affected platform families and indicators. It does not establish that every organisation in the listed sectors has been targeted, that every indicator remains active, or that every incident will use every technique. Security scanners, PowerShell, scheduled tasks, Group Policy and file-transfer utilities also have legitimate uses. A detection should trigger investigation and correlation, not an automatic conclusion that a breach has occurred."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "The strongest response is therefore layered: reduce exposed remote access, make credentials less powerful, segment systems that should not administer one another, protect backups from domain compromise and retain logs outside the reach of a single host. The NCSC recommends offline backups and regular restore tests because paying a ransom does not guarantee recovery. "
+          },
+          {
+            "text": "Read the recovery recommendations.",
+            "source": "ncsc"
+          },
+          {
+            "text": " For more practical security learning, explore "
+          },
+          {
+            "text": "CyberDefend Academy insights",
+            "internal": "resources"
+          },
+          {
+            "text": "."
+          }
+        ]
+      }
+    ]
+  },
+  {
     "slug": "device-code-phishing-entra-access-controls",
     "title": "Device Code Phishing: A Real Login Page Can Still Be a Trap",
     "description": "Learn how device code phishing abuses legitimate sign-ins and how to review Entra authentication flows, investigate suspicious access and train staff.",
