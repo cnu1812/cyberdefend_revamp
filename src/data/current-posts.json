@@ -155,7 +155,7 @@
         "type": "paragraph",
         "content": [
           {
-            "text": "CERT-In provides file hashes and network indicators in the advisory. Add relevant indicators to your security controls after checking their format, source and operational context. They can help identify known infrastructure or samples, but they are snapshots: a clean hash match does not prove a host is safe, and an IP address may be shared or reassigned. Pair indicator matching with activity that shows how an account or machine is behaving. "
+            "text": "CERT-In provides file hashes and network indicators in the advisory. Add relevant indicators to your security controls after checking their format, source and operational context. They can help identify known infrastructure or samples, but they are snapshots: the absence of an indicator match does not prove a host is safe, and an IP address may be shared or reassigned. Pair indicator matching with activity that shows how an account or machine is behaving. "
           },
           {
             "text": "The published indicators are in the official notice.",
