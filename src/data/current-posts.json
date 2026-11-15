@@ -5952,5 +5952,425 @@
         ]
       }
     ]
+  },
+  {
+    "slug": "danfoss-ak-sm800a-zero-days-refrigeration-controller-ot-security",
+    "title": "Danfoss AK-SM800A Zero-Days: Isolate Refrigeration Controllers First",
+    "description": "Ireland’s NCSC disclosed six pre-authentication RCE vulnerabilities in Danfoss AK-SM800A firmware up to 5.3.2. Learn how to reduce exposure and protect cold-chain operations.",
+    "summary": "A 13 November 2026 NCSC advisory warns of six unpatched pre-authentication RCE flaws in Danfoss AK-SM800A controllers. The immediate defence is to remove public exposure, secure vendor access and independently verify refrigeration settings and alarms.",
+    "author": "CyberDefend",
+    "datePublished": "2026-11-15",
+    "dateModified": "2026-11-15",
+    "category": "OT & industrial cybersecurity",
+    "sources": [
+      {
+        "id": "ncsc",
+        "title": "Ireland NCSC Advisory #2611130306: New Vulnerabilities in Refrigeration Controllers (13 November 2026)",
+        "url": "https://www.ncsc.gov.ie/pdfs/2611130306_New_Vulnerabilities_in_Refrigeration_Controllers.pdf"
+      },
+      {
+        "id": "midnightblue",
+        "title": "Midnight Blue: Multiple remote code execution vulnerabilities in Danfoss AK-SM800A",
+        "url": "https://www.midnightblue.nl/blog/multiple-rce-danfoss-aksm800a"
+      },
+      {
+        "id": "certfr",
+        "title": "CERT-FR Alert CERTFR-2026-ALE-012: Security incident targeting remote refrigeration controllers",
+        "url": "https://cert.cyber.gouv.fr/alerte/CERTFR-2026-ALE-012"
+      },
+      {
+        "id": "fbi",
+        "title": "FBI and Partners: Hardening Industrial Refrigeration and Cold Chain Monitoring Systems (5 November 2026)",
+        "url": "https://www.fbi.gov/investigate/cyber/alerts/2026/us-government-partners-urge-hardening-industrial-refrigeration-and-cold-chain-monitoring-systems"
+      },
+      {
+        "id": "greece",
+        "title": "Greek National Cybersecurity Authority: Recommendations for commercial refrigeration controllers (3 November 2026)",
+        "url": "https://cyber.gov.gr/i-ethniki-archi-kyvernoasfaleias-eiche-enimerosei-kai-systisei-sygkekrimena-metra-prostasias-gnostopoiontas-ton-kindyno-se-elegktes-emporikis-psyxis/"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "heading",
+        "id": "short-answer",
+        "text": "The short answer: isolate first, then assess"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "On 13 November 2026, Ireland’s National Cyber Security Centre (NCSC) published advisory #2611130306 describing six previously unknown pre-authentication remote code execution vulnerabilities in Danfoss AK-SM800A refrigeration controllers. Firmware up to and including 5.3.2 is affected. At publication, the issues had no CVE identifiers and no patches were available. The NCSC says an attacker could gain full control without valid credentials. "
+          },
+          {
+            "text": "Read the NCSC advisory for the affected product and immediate recommendations.",
+            "source": "ncsc"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "For operators, this changes the priority. Do not treat a routine firmware check or password reset as sufficient protection while a controller remains reachable from the public internet. First remove unnecessary exposure, then provide tightly controlled maintenance access and verify that the refrigeration process has not been altered."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "what-is-new",
+        "text": "What the new research says—and what it does not"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "The research by Midnight Blue describes six stack-based buffer overflow vulnerabilities in the AK-SM800A. The affected paths are reachable before authentication, and the researchers report that the issues remain in firmware through version 5.3.2. Detailed technical information is being withheld while coordinated disclosure with the vendor continues. "
+          },
+          {
+            "text": "Read the researcher’s technical summary.",
+            "source": "midnightblue"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Separate the new vulnerability scope from the wider incident scope. The NCSC identifies AK-SM800A firmware up to 5.3.2 for the six newly reported flaws. Its advisory also names Danfoss AK-SC and AK-SM series and Copeland/Dixell XWEB products in the wider threat picture. France’s CERT-FR separately reports compromises involving those controller families. That does not establish that the six new AK-SM800A vulnerabilities affect every model in the other families. "
+          },
+          {
+            "text": "CERT-FR’s alert lists the controller families and recovery guidance.",
+            "source": "certfr"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "caption": "Separate the new AK-SM800A flaws from the wider incident scope",
+        "headers": [
+          "Equipment",
+          "What the sources establish",
+          "Defensive interpretation"
+        ],
+        "rows": [
+          [
+            "Danfoss AK-SM800A, firmware up to and including 5.3.2",
+            "Six new pre-authentication RCE vulnerabilities reported; no CVEs or patches at the NCSC advisory date",
+            "Treat this firmware range as affected; keep management access off the public internet and seek vendor guidance"
+          ],
+          [
+            "Danfoss AK-SC and other AK-SM series",
+            "Named in wider refrigeration-controller incident reporting",
+            "Inventory and assess exposure, support status and product-specific guidance"
+          ],
+          [
+            "Copeland / Dixell XWEB",
+            "CERT-FR reports compromises involving these remote supervisors",
+            "Review internet exposure and apply the correct product-specific security instructions"
+          ]
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "why-it-matters",
+        "text": "Why a refrigeration controller is a critical OT asset"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "A refrigeration controller can influence temperature setpoints, compressor operation, defrost schedules, alarms and remote monitoring. If an attacker changes a setting or interferes with monitoring, the result may be spoiled food or medicine, damaged equipment, interrupted distribution or unsafe storage conditions. The FBI and US government partners warn that malicious actors are targeting unpatched or internet-accessible refrigeration and cold-chain controllers globally, including systems used in food, healthcare and transport. "
+          },
+          {
+            "text": "The FBI and partners’ advisory describes the operational risks and mitigations.",
+            "source": "fbi"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "This applies beyond supermarkets. Indian operators should consider cold-storage warehouses, dairy and food-processing plants, pharmaceutical distribution, hospitals, laboratories and refrigerated transport. Remote access is often installed by an equipment supplier or contractor. A cellular router, service-provider modem or cloud relay may not appear in the organisation’s normal IT inventory."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "remove-exposure",
+        "text": "Priority 1: remove direct internet exposure"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Inventory the route used to reach each controller—not just its IP address. Include devices connected through third-party networks and mobile links. The Greek National Cybersecurity Authority said on 3 November that it had identified more than 300 exposed systems in Greece, mainly commercial refrigeration controllers from several manufacturers. This illustrates how supplier-managed connections can become an overlooked attack surface. "
+          },
+          {
+            "text": "Its recommendations include removing public exposure, VPN access with multifactor authentication, changing default passwords and replacing unsupported equipment.",
+            "source": "greece"
+          }
+        ]
+      },
+      {
+        "type": "list",
+        "items": [
+          [
+            {
+              "text": "Record the manufacturer, model, serial number, firmware, site, support status and business owner for every controller."
+            }
+          ],
+          [
+            {
+              "text": "Map access paths: public IPs, port forwards, cellular routers, private APNs, vendor portals and contractor VPNs."
+            }
+          ],
+          [
+            {
+              "text": "Remove direct inbound access from the public internet to management interfaces. Do not rely on an obscure port or hidden URL."
+            }
+          ],
+          [
+            {
+              "text": "Place controllers in a dedicated OT zone. Permit only required communications to monitoring, engineering and service systems."
+            }
+          ],
+          [
+            {
+              "text": "Use passive discovery or approved records first. Do not actively scan live controllers without a safety plan and vendor/operator approval."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "secure-maintenance",
+        "text": "Priority 2: make remote maintenance deliberate and auditable"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Some systems need remote monitoring and maintenance. The answer is a controlled path, not an open management interface. The NCSC recommends a secured VPN or equivalent protected network. It notes that temporary firewall restrictions to known service-provider addresses may reduce exposure, but IP filtering alone is not a permanent solution. "
+          },
+          {
+            "text": "See the NCSC’s remote-access recommendations.",
+            "source": "ncsc"
+          }
+        ]
+      },
+      {
+        "type": "list",
+        "items": [
+          [
+            {
+              "text": "Require multifactor authentication on the remote-access gateway where supported, and use named accounts rather than shared technician credentials."
+            }
+          ],
+          [
+            {
+              "text": "Route maintenance through a managed jump host or access broker instead of allowing a vendor laptop to reach a flat OT network."
+            }
+          ],
+          [
+            {
+              "text": "Approve access for a defined maintenance window, restrict it to the required controller and revoke it when work is complete."
+            }
+          ],
+          [
+            {
+              "text": "Log VPN, firewall and jump-host activity centrally. Record who changed a setting, why it changed and who approved it."
+            }
+          ],
+          [
+            {
+              "text": "Review contractor accounts, emergency access, default credentials and dormant remote-access paths regularly."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "verify-process",
+        "text": "Priority 3: verify the physical process independently"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "A secure network path does not prove that the controller is behaving safely. Establish a known-good baseline for temperature setpoints, operating limits, defrost schedules, alarm thresholds, notification destinations and authorised accounts. Have the refrigeration engineer and site operations owner approve it, and keep a change record for planned maintenance."
+          }
+        ]
+      },
+      {
+        "type": "list",
+        "items": [
+          [
+            {
+              "text": "Alert on unexpected setpoint changes, unusual defrost cycles or configuration edits outside an approved service window."
+            }
+          ],
+          [
+            {
+              "text": "Watch for new accounts, privilege changes, logins from unfamiliar locations, unexpected restarts and remote-access changes."
+            }
+          ],
+          [
+            {
+              "text": "Check that alarms have not been disabled, redirected or assigned to an unattended mailbox or phone number."
+            }
+          ],
+          [
+            {
+              "text": "Compare controller telemetry with independent temperature sensors or data loggers, and verify alerts reach staff who can respond."
+            }
+          ],
+          [
+            {
+              "text": "Retain firewall, VPN, service-provider and monitoring records outside the controller. Local logs may be incomplete after an incident."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Independent monitoring matters because an attacker who can control a device may also affect the evidence it produces. A separate temperature logger, physical inspection and out-of-band alarm route help operators question readings that look normal on the controller. This is a resilience measure, not a substitute for fixing the access problem."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "suspected-compromise",
+        "text": "If you suspect a controller has been compromised"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Coordinate the response with the site operations lead and a qualified refrigeration engineer. Disconnecting a controller without understanding the process can create a separate safety or product-quality problem. Preserve evidence while stopping untrusted remote access."
+          }
+        ]
+      },
+      {
+        "type": "list",
+        "items": [
+          [
+            {
+              "text": "Restrict network access and disable unnecessary remote sessions. Keep the device away from general IT and the public internet."
+            }
+          ],
+          [
+            {
+              "text": "Check actual temperatures, setpoints, defrost schedules, alarm routes and user accounts against the approved baseline."
+            }
+          ],
+          [
+            {
+              "text": "Preserve external logs, configuration backups, firewall and VPN records, service tickets and independent temperature history before resetting equipment."
+            }
+          ],
+          [
+            {
+              "text": "Ask the vendor for a product-specific compromise assessment, supported recovery procedure and written fix status. Consider replacement if the equipment is unsupported or cannot be trusted."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Do not assume a factory reset alone makes a device safe. CERT-FR warns that resetting an end-of-life controller without removing its underlying vulnerability can lead to another compromise. The new NCSC advisory also relays research describing persistence that may survive a factory reset or firmware update. These are distinct findings, but both support a cautious response: isolate first, preserve evidence and use vendor-guided forensics or replacement where integrity cannot be established. "
+          },
+          {
+            "text": "CERT-FR explains why resetting an unsupported, still-exposed device is not enough.",
+            "source": "certfr"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "known-and-unknown",
+        "text": "What is known—and what remains uncertain"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "As of the NCSC advisory dated 13 November 2026, the six AK-SM800A vulnerabilities had no assigned CVE identifiers and no available patches. The NCSC does not say that these six newly disclosed flaws were used in the previously reported attacks; it separately describes ongoing incidents involving internet-exposed refrigeration interfaces. Technical details are being withheld during coordinated disclosure. Check directly with Danfoss or an authorised service provider for later updates rather than assuming that firmware 5.3.2 or a security-mode setting resolves the new findings."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "operator-checklist",
+        "text": "A practical checklist for Indian operators"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "For supermarkets, cold stores, food manufacturers, hospitals and pharmaceutical logistics teams, assign an owner to close each action:"
+          }
+        ]
+      },
+      {
+        "type": "list",
+        "items": [
+          [
+            {
+              "text": "Inventory all refrigeration and cold-chain controllers, including supplier-managed and cellular-connected devices."
+            }
+          ],
+          [
+            {
+              "text": "Remove public management access and document the approved remote-maintenance route."
+            }
+          ],
+          [
+            {
+              "text": "Confirm the exact model and firmware with the vendor; do not treat AK-SM800A firmware 5.3.2 or earlier as cleared by the 13 November advisory."
+            }
+          ],
+          [
+            {
+              "text": "Verify setpoints, defrost schedules, alarm delivery and temperature records with operations staff."
+            }
+          ],
+          [
+            {
+              "text": "Review end-of-life devices and plan isolation or replacement where security support is unavailable."
+            }
+          ],
+          [
+            {
+              "text": "Exercise an incident procedure covering cyber response, refrigeration engineering, product quarantine and continuity."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "key-takeaway",
+        "text": "The key takeaway"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "The new AK-SM800A findings show why patching cannot be the only control for connected operational technology—especially when a fix is not yet available. Remove direct internet exposure, constrain supplier access, monitor the physical process independently and prepare a safe recovery path. Teams building practical security capability can explore the Academy’s "
+          },
+          {
+            "text": "hands-on labs",
+            "internal": "labs"
+          },
+          {
+            "text": " to strengthen the skills needed to protect operating environments."
+          }
+        ]
+      }
+    ]
   }
 ]
