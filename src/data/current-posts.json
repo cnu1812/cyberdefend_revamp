@@ -6372,5 +6372,409 @@
         ]
       }
     ]
+  },
+  {
+    "slug": "wfx-loot-github-actions-secret-stealer-response-guide",
+    "title": "wfx-loot GitHub Campaign: Detect CI Secret Theft and Rebuild Trust",
+    "description": "A November 2026 campaign used stolen GitHub tokens to plant a CI secret stealer. Learn how to find wfx-loot indicators, audit workflows and rotate exposed credentials.",
+    "summary": "wfx-loot turned trusted GitHub access into a CI compromise. Learn which pull requests and commits to search for, why deleted workflow runs matter, and how to contain token, cloud and package-publishing exposure.",
+    "author": "CyberDefend",
+    "datePublished": "2026-11-16",
+    "dateModified": "2026-11-16",
+    "category": "Software supply-chain security",
+    "sources": [
+      {
+        "id": "aikido",
+        "title": "Aikido Security: wfx-loot campaign pushes CI secret stealer to tens of thousands of repositories (12 November 2026)",
+        "url": "https://www.aikido.dev/blog/compromised-github-accounts-push-ci-secret-stealer-to-tens-of-thousands-of-repositories"
+      },
+      {
+        "id": "stepsecurity",
+        "title": "StepSecurity: WFX Phantom — The GitHub Actions Secret Stealer That Deletes Its Tracks (12 November 2026)",
+        "url": "https://www.stepsecurity.io/blog/wfx-phantom-the-github-actions-secret-stealer"
+      },
+      {
+        "id": "gh_target",
+        "title": "GitHub Docs: Securely using pull_request_target",
+        "url": "https://docs.github.com/en/actions/reference/security/securely-using-pull_request_target"
+      },
+      {
+        "id": "gh_permissions",
+        "title": "GitHub Docs: Workflow syntax — GITHUB_TOKEN permissions",
+        "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax"
+      },
+      {
+        "id": "gh_oidc",
+        "title": "GitHub Docs: Configuring OpenID Connect in cloud providers",
+        "url": "https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-cloud-providers"
+      },
+      {
+        "id": "gh_audit",
+        "title": "GitHub Enterprise Cloud Docs: Investigation tools for security incidents",
+        "url": "https://docs.github.com/en/enterprise-cloud%40latest/code-security/reference/security-incident-response/investigation-tools"
+      },
+      {
+        "id": "gh_pinning",
+        "title": "GitHub Changelog: GitHub Actions policy now supports blocking and SHA pinning actions (15 August 2025)",
+        "url": "https://github.blog/changelog/2025-08-15-github-actions-policy-now-supports-blocking-and-sha-pinning-actions/"
+      },
+      {
+        "id": "gh_oidc_ref",
+        "title": "GitHub Docs: OpenID Connect reference",
+        "url": "https://docs.github.com/en/actions/reference/security/oidc"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "heading",
+        "id": "short-answer",
+        "text": "The short answer: treat CI credentials as production credentials"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "A November 2026 campaign tracked by Aikido Security as wfx-loot shows how a stolen developer token can become a software-supply-chain incident. Beginning around 12:45 UTC on 10 November, attackers used valid GitHub credentials to test repositories they could write to, then inserted a credential-stealing payload where permissions and workflow configuration allowed it. The payload targeted GitHub Actions secrets, runner credentials and cloud access—not just source code. "
+          },
+          {
+            "text": "Aikido’s investigation describes the campaign and its observed scope.",
+            "source": "aikido"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Aikido reported 4,837 compromised accounts opening probe pull requests across 61,764 repositories. Its summary says at least 1,835 repositories ran the payload, while a detailed passage refers to indications in at least 1,806. Treat this as an evolving estimate, not a settled victim count. StepSecurity separately reported more than 63,000 matching probes by the morning of 12 November. A probe pull request shows that suspicious access was tested; it does not, by itself, prove the stealer executed."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "how-campaign-worked",
+        "text": "How the campaign used legitimate repository access"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "The campaign did not depend on a newly discovered GitHub Actions vulnerability. Researchers describe attackers operating through stolen tokens attached to real developer or automation accounts. A compromised identity could open a harmless-looking pull request to check write access. If access was available, the attacker could add code to a workflow, script or package installation hook, execute it through normal automation and quickly revert the visible changes. "
+          },
+          {
+            "text": "Aikido documents the probe and payload-delivery patterns.",
+            "source": "aikido"
+          }
+        ]
+      },
+      {
+        "type": "list",
+        "items": [
+          [
+            {
+              "text": "Probe: "
+            },
+            {
+              "text": "A pull request titled `docs: dependency audit notes`, commonly from a `wfx-docs` branch, tested write access. The pull request itself was not the payload."
+            }
+          ],
+          [
+            {
+              "text": "Insert: "
+            },
+            {
+              "text": "Researchers found malicious changes to existing workflows, throwaway workflow branches and package installation hooks. StepSecurity also documented variants hidden in shell scripts already executed by CI."
+            }
+          ],
+          [
+            {
+              "text": "Collect and leave: "
+            },
+            {
+              "text": "The script gathered credentials available to the job or runner, attempted cloud access and, in observed cases, was followed by a rapid revert and deletion of the workflow run. A missing run number can be an important clue."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "The payload’s collection capability was broad. Aikido and StepSecurity describe access to workflow secrets and variables, the job’s `GITHUB_TOKEN`, environment variables, credential files and runner-process memory. Researchers also documented attempts to exchange GitHub-issued OpenID Connect (OIDC) tokens for cloud sessions. Some samples contained persistence capabilities such as changing AWS role trust or adding Azure federated identity credentials. These capabilities were found in analysed samples; they do not prove every feature was enabled in every affected repository. "
+          },
+          {
+            "text": "StepSecurity’s analysis explains the collection and cloud-persistence paths.",
+            "source": "stepsecurity"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "why-it-matters",
+        "text": "Why a CI runner can expose more than one repository"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "A workflow is a temporary security principal with access to whatever the job can read or request. That may include package publishing tokens, signing credentials, cloud deployment roles, Kubernetes configuration, Vault access and AI service keys. A self-hosted runner may also contain files, cached credentials or network access beyond the repository. If an attacker executes code inside that job, masking secrets in logs does not protect credentials readable from memory or the environment."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Short-lived cloud tokens reduce the lifetime of a stolen session, but they do not undo a trust-policy change or a new identity credential created during the job. GitHub’s OIDC guidance requires cloud trust conditions so that only intended repositories and workflow contexts can obtain access. "
+          },
+          {
+            "text": "Review the OIDC configuration guidance.",
+            "source": "gh_oidc"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "find-indicators",
+        "text": "How to investigate repositories and workflow history"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Start with every repository the affected account could write to—not only repositories it owns. Include organisation repositories reached through collaborator access and automation accounts. Search activity from 10 November 2026 onward, and preserve evidence before removing suspicious changes."
+          }
+        ]
+      },
+      {
+        "type": "list",
+        "items": [
+          [
+            {
+              "text": "Pull requests and branches: "
+            },
+            {
+              "text": "Look for `docs: dependency audit notes`, `wfx-docs`, short-lived `chore/` branches and `ci-check-####` branches."
+            }
+          ],
+          [
+            {
+              "text": "Commit subjects: "
+            },
+            {
+              "text": "Review `ci: refresh build cache`, `ci: restore`, `ci: cleanup`, `chore: add ci helper` and `chore: add dependency audit workflow`."
+            }
+          ],
+          [
+            {
+              "text": "Changed files: "
+            },
+            {
+              "text": "Inspect workflow YAML, `package.json` lifecycle scripts, shell scripts, `.ci-*` files and new workflow files. Review full diffs and commit history, not only the current default branch."
+            }
+          ],
+          [
+            {
+              "text": "Workflow runs: "
+            },
+            {
+              "text": "Compare run numbers and timestamps around suspicious commits. A gap immediately after a suspicious change may indicate a deleted run; it is a lead, not proof on its own."
+            }
+          ],
+          [
+            {
+              "text": "Audit events: "
+            },
+            {
+              "text": "Where available, review organisation or enterprise audit records for workflow-run deletion and token activity. GitHub documents `workflows.delete_workflow_run` for investigating deleted runs."
+            },
+            {
+              "text": " See GitHub’s incident-investigation guidance.",
+              "source": "gh_audit"
+            }
+          ],
+          [
+            {
+              "text": "Package publication: "
+            },
+            {
+              "text": "Check package registries and release history for versions published during the suspicious window. A clean Git branch does not undo a package already published."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "contain-and-recover",
+        "text": "Contain the incident, then rotate what the workflow could reach"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "If you find a probe or suspicious commit, preserve the pull request, branch, commit diff, workflow files, run metadata and audit records. Restrict the compromised account’s write access and stop untrusted workflow execution while the repository owner assesses impact. Avoid deleting evidence before recording it. A probe alone calls for account and token investigation; evidence that the payload ran calls for a wider credential and cloud review."
+          }
+        ]
+      },
+      {
+        "type": "list",
+        "items": [
+          [
+            {
+              "text": "Revoke the compromised identity: "
+            },
+            {
+              "text": "Remove exposed personal access tokens, review OAuth and GitHub App grants, revoke suspicious SSH keys and sessions, and secure the user or bot account before restoring access."
+            }
+          ],
+          [
+            {
+              "text": "Rotate job-accessible credentials: "
+            },
+            {
+              "text": "If the payload ran, treat repository, environment and organisation secrets available to that job as exposed—even if the workflow did not explicitly reference each one. Include package-publishing tokens, deploy keys, signing material, cloud keys, AI API keys and self-hosted runner credentials."
+            }
+          ],
+          [
+            {
+              "text": "Review cloud persistence: "
+            },
+            {
+              "text": "Inspect AWS role trust policies and new access keys, Azure app registrations for unexpected federated credentials such as `wfx-ci-*`, and GCP service-account activity. Review Kubernetes and Vault access if the runner could reach them."
+            }
+          ],
+          [
+            {
+              "text": "Rebuild and verify: "
+            },
+            {
+              "text": "After evidence capture, remove malicious changes, close probe pull requests, inspect release history, rebuild from a known-good commit and confirm required checks cannot be forged or bypassed."
+            }
+          ],
+          [
+            {
+              "text": "Check developer endpoints: "
+            },
+            {
+              "text": "If a developer installed dependencies or ran a package during the exposure window, assess that machine too. Rotate locally stored credentials and review SSH material, cloud profiles and package tokens."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Do not stop after changing a password or rotating one repository secret. If a workflow created a cloud access key or modified federation trust, that persistence can outlive the original token. Revoke the new identity or key, restore the intended trust policy and verify cloud audit logs after the change. "
+          },
+          {
+            "text": "StepSecurity’s response checklist describes provider-specific locations to review.",
+            "source": "stepsecurity"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "harden-workflows",
+        "text": "Make the next workflow compromise less useful"
+      },
+      {
+        "type": "list",
+        "items": [
+          [
+            {
+              "text": "Set minimum permissions: "
+            },
+            {
+              "text": "Use workflow- and job-level `permissions` so each job receives only the `GITHUB_TOKEN` scopes it needs. Keep build and test jobs read-only; grant write access only to the publishing job that requires it. "
+            },
+            {
+              "text": "GitHub documents the permissions model.",
+              "source": "gh_permissions"
+            }
+          ],
+          [
+            {
+              "text": "Separate untrusted contributions: "
+            },
+            {
+              "text": "Prefer `pull_request` for ordinary fork validation. Avoid `pull_request_target` unless elevated trust is genuinely needed, and never execute untrusted pull-request code in a privileged context. "
+            },
+            {
+              "text": "Follow GitHub’s security guidance.",
+              "source": "gh_target"
+            }
+          ],
+          [
+            {
+              "text": "Constrain OIDC trust: "
+            },
+            {
+              "text": "Grant `id-token: write` only to jobs that need it. Bind cloud trust to the intended repository, branch, tag, environment and reusable workflow where supported; avoid broad wildcard trust. "
+            },
+            {
+              "text": "Review GitHub’s OIDC claims reference.",
+              "source": "gh_oidc_ref"
+            }
+          ],
+          [
+            {
+              "text": "Protect workflow files: "
+            },
+            {
+              "text": "Require review for `.github/workflows/**`, `package.json`, lockfiles and release scripts. Use CODEOWNERS, branch protection and narrowly assigned bypass permissions."
+            }
+          ],
+          [
+            {
+              "text": "Pin and govern actions: "
+            },
+            {
+              "text": "Pin third-party actions to full commit SHAs and review updates. SHA pinning prevents a moved tag silently changing workflow code; it does not make an action inherently trustworthy. "
+            },
+            {
+              "text": "See GitHub’s SHA-pinning policy guidance.",
+              "source": "gh_pinning"
+            }
+          ],
+          [
+            {
+              "text": "Isolate runners: "
+            },
+            {
+              "text": "Prefer clean, ephemeral runners for sensitive jobs. Avoid sharing persistent self-hosted runners between untrusted pull requests and release workflows; remove unnecessary network routes and local credentials."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "limits-and-takeaways",
+        "text": "What the indicators cannot tell you"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "The campaign changed delivery and exfiltration details during the reporting window. StepSecurity observed variants using different collection channels, while Aikido’s report records two different counts for repositories where the payload appeared to run. File hashes may not be stable across repository-specific copies. Blocking a few IP addresses or searching only the current default branch is not enough. A missing run number, suspicious pull request or unusual commit should trigger investigation, but none is a complete incident verdict by itself."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "For Indian software companies, SaaS providers, fintech teams and open-source maintainers, the lesson is to treat source-control access, CI permissions and cloud federation as one identity boundary. Inventory which workflows can publish packages or deploy infrastructure, reduce the credentials available to each job, and practise revocation and recovery. Teams developing those skills can explore CyberDefend Academy’s "
+          },
+          {
+            "text": "hands-on labs",
+            "internal": "labs"
+          },
+          {
+            "text": " to strengthen secure build and defensive engineering practice."
+          }
+        ]
+      }
+    ]
   }
 ]
