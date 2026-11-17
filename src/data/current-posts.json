@@ -1,5 +1,371 @@
 [
   {
+    "slug": "check-point-cve-2026-123039-gaia-root-escalation-response",
+    "title": "Check Point CVE-2026-123039: Patch Gaia and Investigate Root Access",
+    "description": "Check Point confirms exploitation of CVE-2026-123039 on Gaia appliances. Learn affected releases, November hotfix priorities, indicators and post-compromise checks.",
+    "summary": "A local DynamicCLI privilege-escalation flaw became part of a real intrusion chain against internet-facing Check Point gateways. Patch the appliance and investigate for persistence—not just the CVE.",
+    "author": "CyberDefend",
+    "datePublished": "2026-11-17",
+    "dateModified": "2026-11-17",
+    "category": "Network appliance security",
+    "sources": [
+      {
+        "id": "cp_advisory",
+        "title": "Check Point Security Advisory: Active Exploitation of PHP2Shell and Local Privilege Escalation (12 November 2026)",
+        "url": "https://blog.checkpoint.com/security/security-advisory-active-exploitation-of-php2shell-and-local-privilege-escalation/"
+      },
+      {
+        "id": "cp_research",
+        "title": "Check Point Research: PHP2Shell Exploitation on Check Point Gateway (12 November 2026)",
+        "url": "https://research.checkpoint.com/2026/php2shell-exploitation-on-check-point-gateway/"
+      },
+      {
+        "id": "cp_sk",
+        "title": "Check Point Support: SK1000362 — CVE-2026-123039, DynamicCLI local privilege escalation",
+        "url": "https://support.checkpoint.com/results/sk/sk1000362"
+      },
+      {
+        "id": "canada",
+        "title": "Canadian Centre for Cyber Security: Check Point security advisory AV26-1154, updated 13 November 2026",
+        "url": "https://www.cyber.gc.ca/en/alerts-advisories/check-point-security-advisory-av26-1154"
+      },
+      {
+        "id": "cisa_kev",
+        "title": "CISA Known Exploited Vulnerabilities Catalog — CVE-2026-123039",
+        "url": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog?field_cve=CVE-2026-123039"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "heading",
+        "id": "short-answer",
+        "text": "The short answer: patch, then verify the appliance"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Check Point confirmed in a 12 November 2026 security advisory that attackers had exploited CVE-2026-123039, a local privilege-escalation vulnerability in the Gaia operating system’s Dynamic CLI service. The vendor rated it CVSS 7.8 and marked it as exploited in the wild. The Canadian Centre for Cyber Security separately reported that CISA added the CVE to its Known Exploited Vulnerabilities (KEV) Catalog on 13 November. "
+          },
+          {
+            "text": "Read the vendor’s advisory and response recommendation.",
+            "source": "cp_advisory"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "The important nuance is that CVE-2026-123039 is not, by itself, an unauthenticated remote-code-execution bug. It is a local escalation flaw: an attacker first needs a foothold on the appliance. Check Point’s support note describes a local world-writable control socket used by the root-owned DynamicCLI service. A process that has already reached the device can abuse that boundary to obtain root-level command execution. "
+          },
+          {
+            "text": "The vendor’s technical support note describes the affected component.",
+            "source": "cp_sk"
+          },
+          {
+            "text": " The real-world risk increased because attackers chained the local flaw after gaining initial access through a separate Mobile Access vulnerability."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "scope-and-fix",
+        "text": "Affected releases and the November hotfix"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Check Point’s 12 November vulnerability table lists Gaia releases R82.20, R82.10, R82 and R81.20 for CVE-2026-123039. The Canadian advisory identifies affected product families including Force Firewalls, Management and Log Servers, Multi-Domain Security Management and Multi-Domain Log Server, and Maestro Orchestrator. Product role and release both matter: use the vendor’s SK1000362 advisory to confirm the exact applicability and fixed Jumbo Hotfix Accumulator take for each appliance rather than assuming that every device on a major release has the same status. "
+          },
+          {
+            "text": "Check Point’s affected-version table and hotfix direction are here.",
+            "source": "cp_advisory"
+          },
+          {
+            "text": " The Canadian advisory provides an independent government summary of the affected product families.",
+            "source": "canada"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Check Point recommends installing the November Jumbo Hotfix on all Management Servers and Security Gateways, with internet-facing Mobile Access deployments prioritised. The same bundle incorporates fixes for PHP2Shell (CVE-2026-109618 and CVE-2026-109619), which the vendor says was used for initial access in the observed incidents. Treat the hotfix as a release-specific maintenance change: confirm the supported take, review the vendor installation notes, back up the configuration, plan high-availability failover, and verify the installed build after the change. "
+          },
+          {
+            "text": "See the November security advisory for the vendor’s current recommendation.",
+            "source": "cp_advisory"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "If an appliance is on a release or configuration whose support status is unclear, do not infer that it is safe because a version string looks newer or because the device is not directly internet-facing. Confirm the exact model, role, release and hotfix with Check Point support. A management server or log server can be as consequential as the perimeter gateway if it holds privileged control over the security estate."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "observed-attack-chain",
+        "text": "How the vulnerability was used in an intrusion"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Check Point Research describes activity beginning on 30 October 2026 and a second scanning wave on 2 November. In the investigated chain, attackers first exploited PHP2Shell on an unpatched Mobile Access portal. They then used CVE-2026-123039 to escalate from the portal service account to root, deployed web shells and the TSGA backdoor with its TSProxy networking component, and searched for additional systems inside the environment. "
+          },
+          {
+            "text": "The research report documents the sequence and its technical evidence.",
+            "source": "cp_research"
+          }
+        ]
+      },
+      {
+        "type": "list",
+        "items": [
+          [
+            {
+              "text": "Initial access: "
+            },
+            {
+              "text": "The attackers targeted internet-facing Mobile Access portals affected by the separate PHP2Shell flaws, CVE-2026-109618 and CVE-2026-109619."
+            }
+          ],
+          [
+            {
+              "text": "Privilege escalation: "
+            },
+            {
+              "text": "After obtaining local execution on the gateway, they used the DynamicCLI weakness tracked as CVE-2026-123039 to reach root."
+            }
+          ],
+          [
+            {
+              "text": "Persistence: "
+            },
+            {
+              "text": "The investigation found PHP web shells and the TSGA implant, with TSProxy used to conceal or broker network access."
+            }
+          ],
+          [
+            {
+              "text": "Lateral movement and impact: "
+            },
+            {
+              "text": "The operators scanned internal systems and, in some cases, moved over SSH to a VMware ESXi host. Check Point Research reports destructive wiper activity in a limited part of the observed campaign."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "This is an observed intrusion chain, not a claim that every vulnerable gateway was compromised or that every intrusion ended in data destruction. Check Point’s public advisory says the activity was observed from 30 October until 4 November and describes destructive activity in a limited number of cases. The research also cautions that the available evidence does not support a high-confidence attribution. Keep those limits intact when briefing management."
+          },
+          {
+            "text": "The vendor’s incident summary distinguishes the observed exploitation from the wider vulnerability scope.",
+            "source": "cp_advisory"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "response-checklist",
+        "text": "A practical response checklist for gateway owners"
+      },
+      {
+        "type": "list",
+        "items": [
+          [
+            {
+              "text": "Build a complete appliance inventory: "
+            },
+            {
+              "text": "Record model, role, Gaia release, Jumbo Hotfix take, high-availability peer and whether Mobile Access is enabled. Include gateways, management servers, log servers and multi-domain systems; do not rely only on internet asset scans."
+            }
+          ],
+          [
+            {
+              "text": "Patch the whole management path: "
+            },
+            {
+              "text": "Apply the November Jumbo Hotfix according to SK1000362 to the affected gateways and management infrastructure. Prioritise exposed Mobile Access portals, but do not leave management or logging systems behind. Confirm the resulting build on every cluster member."
+            }
+          ],
+          [
+            {
+              "text": "Reduce reachable administration: "
+            },
+            {
+              "text": "Restrict management interfaces to dedicated administrator networks or controlled bastions. Require strong multi-factor authentication for administrative access, use named accounts, remove stale accounts and limit vendor or partner access to approved windows."
+            }
+          ],
+          [
+            {
+              "text": "Preserve evidence before cleanup: "
+            },
+            {
+              "text": "Export relevant gateway, management, authentication and traffic logs; capture configuration state and record system time. Preserve available appliance snapshots and central log copies before routine retention or rotation removes useful evidence."
+            }
+          ],
+          [
+            {
+              "text": "Search the vendor’s indicators: "
+            },
+            {
+              "text": "Check for PHP session artifacts containing `upload_progress_pwn`, unexpected processes or binaries named like `CPconfigdaemon`, unfamiliar scanner or wiper files under temporary directories, and notes referencing `DREAM_ANNEXATION`. Review unexplained gaps in firewall traffic logs, especially around service crashes. "
+            },
+            {
+              "text": "Use Check Point’s complete indicator list and hashes as the source of truth.",
+              "source": "cp_advisory"
+            }
+          ],
+          [
+            {
+              "text": "Look beyond the gateway: "
+            },
+            {
+              "text": "Review unusual SSH access to VMware ESXi, unexpected use of service accounts such as `vpxuser`, new or modified files, changes to virtualisation management, and access to backup systems. Compare IP addresses and file hashes against the research report, but do not treat a clean IOC search as proof of safety. "
+            },
+            {
+              "text": "Check Point Research publishes the technical indicators and hashes.",
+              "source": "cp_research"
+            }
+          ],
+          [
+            {
+              "text": "Rotate exposed credentials: "
+            },
+            {
+              "text": "If the appliance was compromised, identify administrator credentials, service accounts, certificates, API tokens and secrets that the device or its management plane could access. Revoke or rotate them after evidence preservation and check for new accounts, keys or trust changes."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "if-compromise-is-suspected",
+        "text": "If you find indicators, do not stop at patching"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "A successful hotfix closes a known vulnerability; it does not remove a web shell, backdoor, stolen credential or altered configuration already placed on the appliance. If an indicator matches, treat the gateway as potentially compromised at the operating-system level until the investigation establishes otherwise. Coordinate containment with network operations so that remote access can be restricted or a high-availability peer used without creating an unplanned outage."
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "Preserve evidence, engage the vendor’s incident-response channel, and determine whether the management plane or connected hypervisors were reached. Depending on the findings, recovery may require rebuilding from trusted vendor software and a known-good configuration rather than simply applying an update in place. Rotate credentials that could have been exposed, review ESXi and backup access, and validate that restored workloads and recovery copies are trustworthy before reconnecting them."
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "reduce-management-plane-risk",
+        "text": "Make the management plane harder to turn into a beachhead"
+      },
+      {
+        "type": "list",
+        "items": [
+          [
+            {
+              "text": "Segment security appliances: "
+            },
+            {
+              "text": "Keep management interfaces off user and guest networks. Separate gateway administration from server and hypervisor management, and allow only the specific flows required for operations."
+            }
+          ],
+          [
+            {
+              "text": "Harden privileged access: "
+            },
+            {
+              "text": "Use MFA, dedicated administrator workstations, time-bound third-party access and just-in-time elevation where supported. Review who can change VPN, Mobile Access, administrator and logging configuration."
+            }
+          ],
+          [
+            {
+              "text": "Monitor for control-plane changes: "
+            },
+            {
+              "text": "Alert on new administrators, unexpected configuration exports, unusual process or service changes, logging interruptions and outbound connections from appliances to destinations that are not part of normal operations."
+            }
+          ],
+          [
+            {
+              "text": "Protect recovery independently: "
+            },
+            {
+              "text": "Keep hypervisor and backup administration on separate access paths. Maintain offline or immutable recovery copies and test restoration; a backup reachable with the same credentials as the gateway is not an independent recovery boundary."
+            }
+          ],
+          [
+            {
+              "text": "Assign an owner to every appliance: "
+            },
+            {
+              "text": "Track vendor advisories, support status, hotfix take, maintenance window and evidence of verification. A patch ticket should close only after the running appliance—not just the downloaded package—has been checked."
+            }
+          ]
+        ]
+      },
+      {
+        "type": "heading",
+        "id": "scope-and-limitations",
+        "text": "What the advisory does—and does not—prove"
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "CVE-2026-123039 is a local privilege-escalation issue that became materially more dangerous when chained with remote initial access through PHP2Shell. The vendor reported exploitation in late October and early November; CISA’s KEV listing is a strong prioritisation signal, not a list of affected customers. Public reporting does not establish that every affected release was compromised, that the same intrusion sequence is active everywhere today, or that Indian organisations were specifically targeted. The right response is to check product exposure and evidence, not to infer victim status from geography or from the CVE alone."
+          },
+          {
+            "text": "The Canadian Centre’s advisory records the KEV addition and links to the vendor and CISA references.",
+            "source": "canada"
+          },
+          {
+            "text": "The CISA catalog is available for ongoing status checks.",
+            "source": "cisa_kev"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "text": "For a related explanation of the separate PHP2Shell initial-access vulnerabilities, see CyberDefend Academy’s "
+          },
+          {
+            "text": "PHP2Shell response checklist",
+            "internal": "post_php2shell-php-security-updates-response-checklist"
+          },
+          {
+            "text": ". Teams strengthening their defensive engineering practice can also explore CyberDefend Academy’s "
+          },
+          {
+            "text": "hands-on labs",
+            "internal": "labs"
+          },
+          {
+            "text": " and use this guide as a starting point for a vendor-specific appliance review."
+          }
+        ]
+      }
+    ]
+  },
+  {
     "slug": "the-gentlemen-ransomware-cert-in-network-containment-guide",
     "title": "The Gentlemen Ransomware: Stop Lateral Movement Before Encryption",
     "description": "CERT-In’s 13 November 2026 alert explains The Gentlemen ransomware. Learn how to reduce remote-access exposure, detect lateral movement and protect recovery.",
