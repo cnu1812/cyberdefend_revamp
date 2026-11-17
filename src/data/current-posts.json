@@ -345,11 +345,11 @@
         "type": "paragraph",
         "content": [
           {
-            "text": "For a related explanation of the separate PHP2Shell initial-access vulnerabilities, see CyberDefend Academy’s "
+            "text": "For a related explanation of the separate PHP2Shell initial-access vulnerabilities, see the earlier PHP2Shell response checklist in CyberDefend Academy’s current insights. "
           },
           {
-            "text": "PHP2Shell response checklist",
-            "internal": "post_php2shell-php-security-updates-response-checklist"
+            "text": "Browse related Academy insights",
+            "internal": "resources"
           },
           {
             "text": ". Teams strengthening their defensive engineering practice can also explore CyberDefend Academy’s "
