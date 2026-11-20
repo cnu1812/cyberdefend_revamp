@@ -12,7 +12,7 @@ CyberDefend is a Bengaluru cybersecurity company. This repository is a **zero-de
 |---|---|---|---|
 | `cyberdefend.in` | `main` | 11 | Homepage, contact, privacy, terms, careers (hub + 6 role pages), talent solutions |
 | `services.cyberdefend.in` | `services` | 7 | Services hub, VAPT, awareness, advisory, talent, corporate training cross-link, careers redirect |
-| `academy.cyberdefend.in` | `academy` | 43 | Academy hub, programmes, labs, internships, certifications, corporate/college training, security engineering programme, 3 legacy courses, blog (26 current posts + archived articles), resources, careers redirect |
+| `academy.cyberdefend.in` | `academy` | 44 | Academy hub, programmes, labs, internships, campus ambassadors, certifications, corporate/college training, security engineering programme, 3 legacy courses, blog (26 current posts + archived articles), resources, careers redirect |
 
 Routes are defined in the `defs` object in `scripts/build.mjs` as `[domain, path]` tuples:
 ```
@@ -54,6 +54,7 @@ The `link(key)` function resolves routes: in preview mode (`SITE=all`), domains 
 │   ├── home.mjs               # Homepage editorial layout and hero
 │   ├── training.mjs           # 8 training domains + corporate/college training pages
 │   ├── academy-programme.mjs  # 40-hour "Advanced Security Engineering & AI Security" flagship programme
+│   ├── campus-ambassadors.mjs # Campus Ambassador Programme: interactive tiers, benefits, application flow
 │   ├── careers.mjs            # 6 career roles with detail pages
 │   ├── talent.mjs             # IT staff augmentation / talent solutions
 │   ├── legacy.mjs             # Archived articles, 3 legacy course pages, careers/case-studies redirects
@@ -69,6 +70,7 @@ The `link(key)` function resolves routes: in preview mode (`SITE=all`), domains 
 │       ├── style.css          # Base design system: CSS custom properties, layout, responsive grid
 │       ├── refinement.css     # Manrope font faces, homepage premium hero, service visuals, contact layout
 │       ├── programme.css      # Academy programme page styles (curriculum, platforms, capstone)
+│       ├── ambassadors.css    # Campus Ambassador Programme styles (tiers, badges, benefits, animations)
 │       ├── careers.css        # Careers page styles (roles, manifesto, detail pages)
 │       ├── blog.css           # Blog article styles (copy, tables, sources, table of contents)
 │       ├── analytics.css      # Cookie consent banner styles

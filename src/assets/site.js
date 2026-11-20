@@ -43,3 +43,11 @@ if(form){
   });
  }
 }
+if(typeof IntersectionObserver!=='undefined'){
+ const ambObserver=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('amb-visible');ambObserver.unobserve(e.target);}});
+ },{threshold:0.12});
+ document.querySelectorAll('.amb-animate').forEach(el=>ambObserver.observe(el));
+}else{
+ document.querySelectorAll('.amb-animate').forEach(el=>el.classList.add('amb-visible'));
+}
