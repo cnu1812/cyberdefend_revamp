@@ -27,6 +27,10 @@
     [
       "/courses",
       "https://academy.cyberdefend.in/programmes/"
+    ],
+    [
+      "/careers/ui-ux-design-intern",
+      "/careers/"
     ]
   ],
   "services": [

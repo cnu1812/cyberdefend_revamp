@@ -28,7 +28,8 @@ assert.equal(resolve(origins.academy+'/certification/cissp').url.searchParams.ge
 assert(exists(new URL(origins.academy+'/blogs/ransomware/')));
 assert(exists(new URL(origins.academy+'/courses/cybersecurity-beginners/')));
 assert.equal(resolve(origins.main+'/academy/labs/').url.href,origins.academy+'/labs/');
-const careersMap=fs.readFileSync('dist/main/sitemap.xml','utf8');assert.equal([...careersMap.matchAll(/<loc>https:\/\/cyberdefend\.in\/careers\//g)].length,8,'Careers hub and seven roles must be indexed');
+const careersMap=fs.readFileSync('dist/main/sitemap.xml','utf8');assert.equal([...careersMap.matchAll(/<loc>https:\/\/cyberdefend\.in\/careers\//g)].length,7,'Careers hub and six open roles must be indexed');
+assert.equal(resolve(origins.main+'/careers/ui-ux-design-intern').url.pathname,'/careers/');
 let pages=0,sitemapUrls=0;
 for(const [site,origin] of Object.entries(origins)){
  const titles=new Set();const sitemap=fs.readFileSync(`dist/${site}/sitemap.xml`,'utf8');
