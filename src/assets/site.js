@@ -52,3 +52,9 @@ if(typeof IntersectionObserver!=='undefined'){
 }else{
  document.querySelectorAll('.amb-animate').forEach(el=>el.classList.add('amb-visible'));
 }
+document.addEventListener('click',function(event){
+ const target=event.target;
+ if(!(target instanceof Element))return;
+ const whatsappLink=target.closest('a[href*="wa.me"], a[href*="api.whatsapp.com"], a[href*="whatsapp.com"]');
+ if(whatsappLink&&typeof window.fbq==='function')window.fbq('track','Contact');
+});
