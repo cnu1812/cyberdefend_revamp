@@ -22,6 +22,7 @@ if(form){
    if(!response.ok||result.ok!==true||result.requestId!==requestId)throw new Error(result.message||'We couldn’t confirm receipt. Please try again.');
    status.textContent=result.message;status.dataset.state='success';form.reset();requestId='';lastPayload='';
    document.dispatchEvent(new Event('cyberdefend:enquiry-success'));
+   if(typeof window.fbq==='function')window.fbq('track','Lead');
   }catch(error){status.textContent=error.name==='TimeoutError'?'We couldn’t confirm receipt in time. Please try again; we’ll avoid saving a duplicate enquiry.':error.message;status.dataset.state='error';}
   finally{pending=false;button.disabled=false;button.innerHTML='Send enquiry <span aria-hidden="true">↗</span>';form.removeAttribute('aria-busy');status.focus();}
  });
