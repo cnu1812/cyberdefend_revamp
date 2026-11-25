@@ -10,7 +10,7 @@ export async function submitEnquiry(request,{env,send=fetch}={}){
   let input;try{input=JSON.parse(text);}catch{return reply(400,{ok:false,message:'Please check your details.'});}
   if(!input||typeof input!=='object'||Array.isArray(input))return reply(400,{ok:false,message:'Please check your details.'});
   const data={};
-  for(const [key,max] of Object.entries({name:100,email:200,phone:30,organisation:150,topic:100,message:2500,requestId:80,website:200})){
+  for(const [key,max] of Object.entries({name:100,email:200,phone:30,organisation:150,topic:100,message:2500,requestId:80,website:200,userAgent:1000})){
     if(input[key]!=null&&typeof input[key]!=='string')return reply(400,{ok:false,message:'Please check your details.'});
     data[key]=(input[key]||'').trim();
     if(data[key].length>max)return reply(400,{ok:false,message:'Please shorten the highlighted details.'});

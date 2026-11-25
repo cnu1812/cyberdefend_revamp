@@ -12,6 +12,7 @@ if(form){
  form.addEventListener('submit',async e=>{
   e.preventDefault();if(pending||!form.reportValidity())return;
   const data=Object.fromEntries(new FormData(form));
+  data.userAgent=navigator.userAgent;
   const payload=JSON.stringify(data);
   if(payload!==lastPayload){requestId=crypto.randomUUID();lastPayload=payload;}
   const status=document.querySelector('#form-status'),button=form.querySelector('[type="submit"]');
